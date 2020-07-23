@@ -1,36 +1,127 @@
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
+ * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
-
+import { __ } from "@wordpress/i18n";
+import { Component } from "@wordpress/element";
+import { Button } from "@wordpress/components";
+import { MediaUpload } from "@wordpress/block-editor";
 /**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ * Internal dependencies
  */
-import './editor.scss';
+import Inspector from "./inspector";
+import ReactCompareImage from "./ReactCompareImage";
+import uuid from "../util/uuid";
 
-/**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#edit
- *
- * @param {Object} [props]           Properties passed from the editor.
- * @param {string} [props.className] Class name generated for the block.
- *
- * @return {WPElement} Element to render.
- */
-export default function Edit( { className } ) {
-	return (
-		<p className={ className }>
-			{ __(
-				'Image Comparison – hello from the editor!',
-				'create-block'
-			) }
-		</p>
-	);
+export default class Edit extends Component {
+	componentDidMount() {
+		let id = uuid().substr(0, 5);
+		this.props.setAttributes({ id });
+	}
+
+	onSliderChange = (position) => this.props.setAttributes({ position });
+
+	onImageSwap = () => {
+		let { leftImageURL, rightImageURL, swap } = this.props.attributes;
+		swap = !swap;
+		[leftImageURL, rightImageURL] = [rightImageURL, leftImageURL];
+
+		this.props.setAttributes({ swap, leftImageURL, rightImageURL });
+	};
+
+	render() {
+		const { isSelected, attributes, setAttributes } = this.props;
+		const {
+			leftImageURL,
+			rightImageURL,
+			hover,
+			fullWidth,
+			imageWidth,
+			position,
+			swap,
+			lineWidth = lineWidth || 3,
+			lineColor,
+			arrowColor,
+		} = attributes;
+
+		const hasBothImages = leftImageURL && rightImageURL;
+
+		const wrapperStyles = {
+			width: fullWidth ? "100%" : imageWidth,
+		};
+
+		const imageStyles = {
+			height: 200,
+			width: 200,
+		};
+
+		return [
+			isSelected && (
+				<Inspector
+					key="inspector"
+					attributes={attributes}
+					setAttributes={setAttributes}
+					onImageSwap={this.onImageSwap}
+				/>
+			),
+
+			<div
+				key="wrapper"
+				className="eb-image-comparison-wrapper"
+				style={wrapperStyles}
+			>
+				{hasBothImages ? (
+					<ReactCompareImage
+						leftImage={leftImageURL}
+						rightImage={rightImageURL}
+						hover={hover}
+						sliderPositionPercentage={position}
+						onSliderPositionChange={this.onSliderChange}
+						sliderLineWidth={lineWidth}
+						handleSize={45}
+						handleColor={lineColor}
+						sliderLineColor={lineColor}
+						arrowColor={arrowColor}
+					/>
+				) : (
+					<div className="eb-image-comparison-placeholder">
+						<MediaUpload
+							onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+							type="image"
+							value={leftImageURL}
+							render={({ open }) =>
+								!leftImageURL ? (
+									<Button
+										className="eb-image-comparison-upload components-button"
+										label={__("Upload Left Image")}
+										icon="format-image"
+										onClick={open}
+									/>
+								) : (
+									<img src={leftImageURL} style={imageStyles} />
+								)
+							}
+						/>
+
+						<MediaUpload
+							onSelect={(media) => setAttributes({ rightImageURL: media.url })}
+							type="image"
+							value={rightImageURL}
+							render={({ open }) =>
+								!rightImageURL ? (
+									<Button
+										className="eb-image-comparison-upload components-button"
+										label={__("Upload Right Image")}
+										icon="format-image"
+										onClick={open}
+									/>
+								) : (
+									<img src={rightImageURL} style={imageStyles} />
+								)
+							}
+						/>
+					</div>
+				)}
+			</div>,
+		];
+	}
 }

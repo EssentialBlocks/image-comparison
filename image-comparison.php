@@ -6,9 +6,9 @@
  * Author:          The WordPress Contributors
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     create-block
+ * Text Domain:     image-comparison
  *
- * @package         create-block
+ * @package         block
  */
 
 /**
@@ -23,7 +23,7 @@ function create_block_image_comparison_block_init() {
 	$script_asset_path = "$dir/build/index.asset.php";
 	if ( ! file_exists( $script_asset_path ) ) {
 		throw new Error(
-			'You need to run `npm start` or `npm run build` for the "create-block/image-comparison" block first.'
+			'You need to run `npm start` or `npm run build` for the "block/image-comparison" block first.'
 		);
 	}
 	$index_js     = 'build/index.js';
@@ -35,14 +35,6 @@ function create_block_image_comparison_block_init() {
 		$script_asset['version']
 	);
 
-	$editor_css = 'build/index.css';
-	wp_register_style(
-		'create-block-image-comparison-block-editor',
-		plugins_url( $editor_css, __FILE__ ),
-		array(),
-		filemtime( "$dir/$editor_css" )
-	);
-
 	$style_css = 'build/style-index.css';
 	wp_register_style(
 		'create-block-image-comparison-block',
@@ -51,10 +43,52 @@ function create_block_image_comparison_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-	register_block_type( 'create-block/image-comparison', array(
-		'editor_script' => 'create-block-image-comparison-block-editor',
-		'editor_style'  => 'create-block-image-comparison-block-editor',
-		'style'         => 'create-block-image-comparison-block',
-	) );
+  $twenty_twenty_css = 'src/css/twentytwenty.css';
+  wp_enqueue_style(
+    'twenty-twenty-style',
+    plugins_url($twenty_twenty_css, __FILE__),
+    array()
+  );
+
+  $frontend_js = 'src/frontend.js';
+  wp_enqueue_script(
+    'essential-blocks-image-comparison-frontend',
+    plugins_url($frontend_js, __FILE__),
+    array( "jquery","wp-editor"),
+    true
+  );
+
+  $image_loaded_js = "src/js/images-loaded.min.js";
+  wp_enqueue_script(
+    'essential-blocks-image-loaded',
+    plugins_url($image_loaded_js, __FILE__),
+    array("wp-editor","jquery"),
+    true
+  );
+
+  $twenty_twenty_js ="src/js/jquery.twentytwenty.js" ;
+  wp_enqueue_script(
+    'essential-blocks-twenty-twenty',
+    plugins_url($twenty_twenty_js, __FILE__),
+    array("wp-editor","jquery"),
+    true,
+    true
+  );
+
+  $twenty_move = "src/js/jquery.event.move.js";
+  wp_enqueue_script(
+    'essential-blocks-twenty-move',
+    plugins_url($twenty_move, __FILE__),
+    array("wp-editor","jquery"),
+    true
+  );
+
+	if( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/image-comparison' ) ) {
+    register_block_type( 'block/image-comparison', array(
+      'editor_script' => 'create-block-image-comparison-block-editor',
+      'editor_style'  => 'create-block-image-comparison-block-editor',
+      'style'         => 'create-block-image-comparison-block',
+    ) );
+  }
 }
 add_action( 'init', 'create_block_image_comparison_block_init' );

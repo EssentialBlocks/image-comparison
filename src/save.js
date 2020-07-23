@@ -1,26 +1,53 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
- */
-import { __ } from '@wordpress/i18n';
+const Save = ({ attributes }) => {
+	const {
+		id,
+		leftImageURL,
+		rightImageURL,
+		hover,
+		fullWidth,
+		imageWidth,
+		position,
+		overlay,
+		beforeLabel,
+		afterLabel,
+		lineColor,
+		lineWidth = lineWidth || 3,
+		arrowColor,
+	} = attributes;
 
-/**
- * The save function defines the way in which the different attributes should
- * be combined into the final markup, which is then serialized by the block
- * editor into `post_content`.
- *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#save
- *
- * @return {WPElement} Element to render.
- */
-export default function save() {
+	const defaultLineColor = "#ffffff";
+	const defaultArrowColor = "#ffffff";
+
+	const wrapperStyles = {
+		width: fullWidth ? undefined : imageWidth,
+	};
+
 	return (
-		<p>
-			{ __(
-				'Image Comparison – hello from the saved content!',
-				'create-block'
-			) }
-		</p>
+		<div
+			className="eb-image-comparison-wrapper"
+			data-id={`eb-ic-${id}`}
+			data-overlay={overlay ? "true" : "false"}
+			data-hover={hover ? "true" : "false"}
+			data-position={position}
+			data-before-label={beforeLabel}
+			data-after-label={afterLabel}
+			data-line-width={lineWidth}
+			data-line-color={lineColor || defaultLineColor}
+			data-arrow-color={arrowColor || defaultArrowColor}
+			style={wrapperStyles}
+		>
+			<img
+				className="eb-image-comparison-image eb-image-comparison-left"
+				alt="Left Image"
+				src={leftImageURL}
+			/>
+			<img
+				className="eb-image-comparison-image eb-image-comparison-right"
+				alt="Right Image"
+				src={rightImageURL}
+			/>
+		</div>
 	);
-}
+};
+
+export default Save;
