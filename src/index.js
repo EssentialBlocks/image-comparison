@@ -11,6 +11,7 @@ registerBlockType("block/image-comparison", {
 	title: __("Image Comparison", "block"),
 	description: __("", "block"),
 	category: "widgets",
+	keywords: [__("image compare"), __("comparison"), __("compare")],
 	attributes,
 	icon,
 	edit: Edit,
