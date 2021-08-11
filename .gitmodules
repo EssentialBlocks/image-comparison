@@ -1,3 +1,0 @@
-[submodule "util/image-avatar"]
-	path = util/image-avatar
-	url = git@github.com:EssentialBlocks/image-avatar.git
