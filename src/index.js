@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 
 import "./style.scss";
 import Edit from "./edit";
-import save from "./save";
+import save from "./Save";
 import icon from "./icon";
 import attributes from "./attributes";
 

@@ -29,12 +29,24 @@ function create_block_image_comparison_block_init() {
 		);
 	}
 	$index_js     = 'build/index.js';
-	$script_asset = require( $script_asset_path );
 	wp_register_script(
 		'create-block-image-comparison-block-editor',
 		plugins_url( $index_js, __FILE__ ),
-		$script_asset['dependencies'],
-		$script_asset['version']
+		array(
+			'wp-blocks',
+			'wp-i18n',
+			'wp-element',
+      'wp-block-editor'
+		),
+		filemtime( "$dir/$index_js" )
+	);
+
+  $editor_css = 'build/index.css';
+	wp_register_style(
+		'create-block-image-comparison-block-editor',
+		plugins_url( $editor_css, __FILE__ ),
+		array(),
+		filemtime( "$dir/$editor_css" )
 	);
 
 	$style_css = 'build/style-index.css';
@@ -45,52 +57,43 @@ function create_block_image_comparison_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-  $twenty_twenty_css = 'src/css/twentytwenty.css';
-  wp_enqueue_style(
-    'twenty-twenty-style',
-    plugins_url($twenty_twenty_css, __FILE__),
-    array()
-  );
 
+  $image_viewer = 'src/js/image-compare-viewer.min.js';
+  wp_register_script(
+    'essential-blocks-image-comparison-viewer',
+    plugins_url($image_viewer, __FILE__),
+    array(),
+    filemtime( "$dir/$image_viewer" ),
+    true
+  );
+  
+  
   $frontend_js = 'src/frontend.js';
-  wp_enqueue_script(
+  wp_register_script(
     'essential-blocks-image-comparison-frontend',
     plugins_url($frontend_js, __FILE__),
-    array( "jquery","wp-editor"),
-    true
-  );
-
-  $image_loaded_js = "src/js/images-loaded.min.js";
-  wp_enqueue_script(
-    'essential-blocks-image-loaded',
-    plugins_url($image_loaded_js, __FILE__),
-    array("wp-editor","jquery"),
-    true
-  );
-
-  $twenty_twenty_js ="src/js/jquery.twentytwenty.js" ;
-  wp_enqueue_script(
-    'essential-blocks-twenty-twenty',
-    plugins_url($twenty_twenty_js, __FILE__),
-    array("wp-editor","jquery"),
+    array(),
+    filemtime( "$dir/$frontend_js" ),
     true,
-    true
   );
-
-  $twenty_move = "src/js/jquery.event.move.js";
-  wp_enqueue_script(
-    'essential-blocks-twenty-move',
-    plugins_url($twenty_move, __FILE__),
-    array("wp-editor","jquery"),
-    true
-  );
+ 
 
 	if( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/image-comparison' ) ) {
     register_block_type( 'block/image-comparison', array(
       'editor_script' => 'create-block-image-comparison-block-editor',
       'editor_style'  => 'create-block-image-comparison-block-editor',
       'style'         => 'create-block-image-comparison-block',
+      'render_callback' => function($attributes, $content) {
+        if(!is_admin()) {
+          wp_enqueue_script( 'essential-blocks-image-comparison-viewer' );
+          wp_enqueue_script( 'essential-blocks-image-comparison-frontend' );
+        }
+      return $content;
+      }
     ) );
   }
 }
 add_action( 'init', 'create_block_image_comparison_block_init' );
+
+
+

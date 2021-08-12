@@ -1,127 +1,166 @@
+const { useBlockProps, MediaUpload } = wp.blockEditor;
+const { select } = wp.data;
+const { Button } = wp.components;
+const { __ } = wp.i18n;
+const { useEffect } = wp.element;
 /**
- * WordPress dependencies
+ * Internal Import
  */
-import { __ } from "@wordpress/i18n";
-import { Component } from "@wordpress/element";
-import { Button } from "@wordpress/components";
-import { MediaUpload } from "@wordpress/block-editor";
-/**
- * Internal dependencies
- */
+import "./editor.scss";
+import ImageCompare from "image-compare-viewer";
 import Inspector from "./inspector";
-import ReactCompareImage from "./ReactCompareImage";
-import uuid from "../util/uuid";
+import {
+	softMinifyCssStrings,
+	isCssExists,
+	mimmikCssForPreviewBtnClick,
+	duplicateBlockIdFix,
+	generateDimensionsControlStyles,
+	generateBorderShadowStyles,
+	generateTypographyStyles,
+	generateResponsiveRangeStyles,
+} from "../util/helpers";
 
-export default class Edit extends Component {
-	componentDidMount() {
-		let id = uuid().substr(0, 5);
-		this.props.setAttributes({ id });
-	}
+const edit = (props) => {
+	const { attributes, setAttributes, clientId, isSelected } = props;
+	const {
+		blockId,
+		blockMeta,
+		// responsive control attribute ⬇
+		resOption,
+		leftImageURL,
+		rightImageURL,
+		hover,
+		fullWidth,
+		imageWidth,
+		overlay,
+		beforeLabel,
+		afterLabel,
+		position,
+		swap,
+		lineWidth,
+		lineColor,
+		arrowColor,
+	} = attributes;
 
-	onSliderChange = (position) => this.props.setAttributes({ position });
+	console.log(leftImageURL, rightImageURL);
+	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
+	useEffect(() => {
+		setAttributes({
+			resOption: select("core/edit-post").__experimentalGetPreviewDeviceType(),
+		});
+	}, []);
 
-	onImageSwap = () => {
-		let { leftImageURL, rightImageURL, swap } = this.props.attributes;
-		swap = !swap;
-		[leftImageURL, rightImageURL] = [rightImageURL, leftImageURL];
+	// this useEffect is for creating an unique id for each block's unique className by a random unique number
+	useEffect(() => {
+		const BLOCK_PREFIX = "eb-typing-text";
+		duplicateBlockIdFix({
+			BLOCK_PREFIX,
+			blockId,
+			setAttributes,
+			select,
+			clientId,
+		});
+	}, []);
 
-		this.props.setAttributes({ swap, leftImageURL, rightImageURL });
-	};
+	// this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
+	useEffect(() => {
+		mimmikCssForPreviewBtnClick({
+			domObj: document,
+			select,
+		});
+	}, []);
 
-	render() {
-		const { isSelected, attributes, setAttributes } = this.props;
-		const {
-			leftImageURL,
-			rightImageURL,
-			hover,
-			fullWidth,
-			imageWidth,
-			position,
-			swap,
-			lineWidth = lineWidth || 3,
-			lineColor,
-			arrowColor,
-		} = attributes;
+	const blockProps = useBlockProps({
+		className: `eb-guten-block-main-parent-wrapper`,
+	});
 
-		const hasBothImages = leftImageURL && rightImageURL;
+	useEffect(() => {
+		const viewers = document.querySelectorAll(".image-compare");
+		console.log("edit", viewers);
+		viewers.forEach((element) => {
+			let view = new ImageCompare(element).mount();
+		});
+	}, []);
 
-		const wrapperStyles = {
-			width: fullWidth ? "100%" : imageWidth,
+	// all css styles for large screen width (desktop/laptop) in strings ⬇
+	const desktopAllStyles = softMinifyCssStrings(``);
+
+	// all css styles for Tab in strings ⬇
+	const tabAllStyles = softMinifyCssStrings(``);
+
+	// all css styles for Mobile in strings ⬇
+	const mobileAllStyles = softMinifyCssStrings(``);
+	// Set All Style in "blockMeta" Attribute
+	useEffect(() => {
+		const styleObject = {
+			desktop: desktopAllStyles,
+			tab: tabAllStyles,
+			mobile: mobileAllStyles,
 		};
+		if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
+			setAttributes({ blockMeta: styleObject });
+		}
+	}, [attributes]);
 
-		const imageStyles = {
-			height: 200,
-			width: 200,
-		};
+	const hasBothImages = leftImageURL && rightImageURL;
 
-		return [
-			isSelected && (
-				<Inspector
-					key="inspector"
-					attributes={attributes}
-					setAttributes={setAttributes}
-					onImageSwap={this.onImageSwap}
-				/>
-			),
-
-			<div
-				key="wrapper"
-				className="eb-image-comparison-wrapper"
-				style={wrapperStyles}
-			>
-				{hasBothImages ? (
-					<ReactCompareImage
-						leftImage={leftImageURL}
-						rightImage={rightImageURL}
-						hover={hover}
-						sliderPositionPercentage={position}
-						onSliderPositionChange={this.onSliderChange}
-						sliderLineWidth={lineWidth}
-						handleSize={45}
-						handleColor={lineColor}
-						sliderLineColor={lineColor}
-						arrowColor={arrowColor}
+	return [
+		isSelected && (
+			<Inspector
+				key="inspector"
+				attributes={attributes}
+				setAttributes={setAttributes}
+			/>
+		),
+		<div className="eb-image-comparison-wrapper">
+			{hasBothImages ? (
+				<div className="image-compare">
+					<img className="eb-image-comparison-left" src={leftImageURL} alt="" />
+					<img
+						className="eb-image-comparison-right"
+						src={rightImageURL}
+						alt=""
 					/>
-				) : (
-					<div className="eb-image-comparison-placeholder">
-						<MediaUpload
-							onSelect={(media) => setAttributes({ leftImageURL: media.url })}
-							type="image"
-							value={leftImageURL}
-							render={({ open }) =>
-								!leftImageURL ? (
-									<Button
-										className="eb-image-comparison-upload components-button"
-										label={__("Upload Left Image")}
-										icon="format-image"
-										onClick={open}
-									/>
-								) : (
-									<img src={leftImageURL} style={imageStyles} />
-								)
-							}
-						/>
-
-						<MediaUpload
-							onSelect={(media) => setAttributes({ rightImageURL: media.url })}
-							type="image"
-							value={rightImageURL}
-							render={({ open }) =>
-								!rightImageURL ? (
-									<Button
-										className="eb-image-comparison-upload components-button"
-										label={__("Upload Right Image")}
-										icon="format-image"
-										onClick={open}
-									/>
-								) : (
-									<img src={rightImageURL} style={imageStyles} />
-								)
-							}
-						/>
-					</div>
-				)}
-			</div>,
-		];
-	}
-}
+				</div>
+			) : (
+				<div className="eb-image-comparison-placeholder">
+					<MediaUpload
+						onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+						type="image"
+						value={leftImageURL}
+						render={({ open }) =>
+							!leftImageURL ? (
+								<Button
+									className="eb-image-comparison-upload components-button"
+									label={__("Upload Left Image")}
+									icon="format-image"
+									onClick={open}
+								/>
+							) : (
+								<img src={leftImageURL} />
+							)
+						}
+					/>
+					<MediaUpload
+						onSelect={(media) => setAttributes({ rightImageURL: media.url })}
+						type="image"
+						value={rightImageURL}
+						render={({ open }) =>
+							!rightImageURL ? (
+								<Button
+									className="eb-image-comparison-upload components-button"
+									label={__("Upload Right Image")}
+									icon="format-image"
+									onClick={open}
+								/>
+							) : (
+								<img src={rightImageURL} />
+							)
+						}
+					/>
+				</div>
+			)}
+		</div>,
+	];
+};
+export default edit;

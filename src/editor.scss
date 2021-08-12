@@ -1,9 +1,20 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
+@import "../util/backend.scss";
 
-.wp-block-create-block-image-comparison {
-	border: 1px dotted #f00;
-}
+.eb-image-comparison-placeholder {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+  }
+  
+  .eb-image-comparison-upload {
+	height: 200px;
+	width: 200px;
+	margin-right: 10px;
+	background: #e3e3e3 !important;
+	display: inline !important;
+  }
+  
+  .eb-image-comparison-image {
+	object-fit: cover;
+	width: 100%;
+  }
