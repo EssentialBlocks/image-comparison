@@ -31,11 +31,16 @@ const Inspector = ({ attributes, setAttributes }) => {
 		leftImageURL,
 		rightImageURL,
 		hover,
+		verticalMode,
+		circleControl,
+		circleBlur,
+		showLabels,
+		labelsOnHover,
+		beforeLabel,
+		afterLabel,
 		fullWidth,
 		imageWidth,
 		overlay,
-		beforeLabel,
-		afterLabel,
 		position,
 		swap,
 		lineWidth,
@@ -97,62 +102,92 @@ const Inspector = ({ attributes, setAttributes }) => {
 					]}
 				>
 					{(tab) => (
-						<div className={"eb-tab-controls" + tab.name}>
+						<div className={"eb-tab-controls " + tab.name}>
 							{tab.name === "general" && (
 								<>
 									<PanelBody title={__("General Settings")} initialOpen={true}>
-										{leftImageURL && (
-											<BaseControl label={__("Left Image")}>
-												<ImageAvatar
-													imageUrl={leftImageURL}
-													onDeleteImage={() =>
-														setAttributes({ leftImageURL: null })
-													}
-												/>
-											</BaseControl>
-										)}
+										<>
+											{leftImageURL && (
+												<BaseControl label={__("Left Image")}>
+													<ImageAvatar
+														imageUrl={leftImageURL}
+														onDeleteImage={() =>
+															setAttributes({ leftImageURL: null })
+														}
+													/>
+												</BaseControl>
+											)}
 
-										{rightImageURL && (
-											<BaseControl label={__("Right Image")}>
-												<ImageAvatar
-													imageUrl={rightImageURL}
-													onDeleteImage={() =>
-														setAttributes({ rightImageURL: null })
-													}
-												/>
-											</BaseControl>
-										)}
-
+											{rightImageURL && (
+												<BaseControl label={__("Right Image")}>
+													<ImageAvatar
+														imageUrl={rightImageURL}
+														onDeleteImage={() =>
+															setAttributes({ rightImageURL: null })
+														}
+													/>
+												</BaseControl>
+											)}
+										</>
 										<ToggleControl
-											label={__("Move on Hover")}
+											label={__("Move on Hover", "image-comparison")}
 											checked={hover}
 											onChange={() => setAttributes({ hover: !hover })}
-											help={__("Update & reload to see effect in backend")}
 										/>
-
 										<ToggleControl
-											label={__("Overlay Label")}
-											checked={overlay}
-											onChange={() => setAttributes({ overlay: !overlay })}
-											help={__("Only visible in frontend")}
+											label={__("Vertical Mode", "image-comparison")}
+											checked={verticalMode}
+											onChange={() =>
+												setAttributes({ verticalMode: !verticalMode })
+											}
 										/>
-
-										{overlay && (
-											<TextControl
-												label={__("Before Label")}
-												value={beforeLabel}
-												onChange={(beforeLabel) =>
-													setAttributes({ beforeLabel })
+										<ToggleControl
+											label={__("Circle Control", "image-comparison")}
+											checked={circleControl}
+											onChange={() =>
+												setAttributes({ circleControl: !circleControl })
+											}
+										/>
+										{circleControl && (
+											<ToggleControl
+												label={__("Blur Circle", "image-comparison")}
+												checked={circleBlur}
+												onChange={() =>
+													setAttributes({ circleBlur: !circleBlur })
 												}
 											/>
 										)}
-
-										{overlay && (
-											<TextControl
-												label={__("After Label")}
-												value={afterLabel}
-												onChange={(afterLabel) => setAttributes({ afterLabel })}
-											/>
+										<ToggleControl
+											label={__("Show Labels", "image-comparison")}
+											checked={showLabels}
+											onChange={() =>
+												setAttributes({ showLabels: !showLabels })
+											}
+										/>
+										{showLabels && (
+											<>
+												<ToggleControl
+													label={__("Show Labels On Hover", "image-comparison")}
+													checked={labelsOnHover}
+													onChange={() =>
+														setAttributes({ labelsOnHover: !labelsOnHover })
+													}
+												/>
+												<TextControl
+													label={__("Before Label", "image-comparison")}
+													value={beforeLabel}
+													onChange={(beforeLabel) =>
+														setAttributes({ beforeLabel })
+													}
+												/>
+												<TextControl
+													label={__("After Label", "image-comparison")}
+													value={afterLabel}
+													onChange={(afterLabel) =>
+														setAttributes({ afterLabel })
+													}
+												/>
+											</>
 										)}
 
 										<ToggleControl

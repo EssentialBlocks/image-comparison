@@ -2,7 +2,7 @@ const { useBlockProps, MediaUpload } = wp.blockEditor;
 const { select } = wp.data;
 const { Button } = wp.components;
 const { __ } = wp.i18n;
-const { useEffect } = wp.element;
+const { useState, useRef, useEffect } = wp.element;
 /**
  * Internal Import
  */
@@ -30,11 +30,16 @@ const edit = (props) => {
 		leftImageURL,
 		rightImageURL,
 		hover,
+		verticalMode,
+		circleControl,
+		circleBlur,
+		showLabels,
+		labelsOnHover,
+		beforeLabel,
+		afterLabel,
 		fullWidth,
 		imageWidth,
 		overlay,
-		beforeLabel,
-		afterLabel,
 		position,
 		swap,
 		lineWidth,
@@ -42,7 +47,79 @@ const edit = (props) => {
 		arrowColor,
 	} = attributes;
 
-	console.log(leftImageURL, rightImageURL);
+	const imageViewerRef = useRef(null);
+	var [imageViewer, setImageViewer] = useState(null);
+
+	const generateOptions = () => {
+		// Generate options for Typed instance
+		const {
+			hover,
+			verticalMode,
+			circleControl,
+			circleBlur,
+			showLabels,
+			labelsOnHover,
+			beforeLabel,
+			afterLabel,
+		} = attributes;
+
+		return {
+			// UI Theme Defaults
+			addCircle: circleControl,
+			addCircleBlur: circleBlur,
+
+			// Label Defaults
+			showLabels: showLabels,
+			labelOptions: {
+				before: beforeLabel,
+				after: afterLabel,
+				onHover: labelsOnHover,
+			},
+
+			// Smoothing
+			smoothing: true,
+			smoothingAmount: 100,
+
+			// Other options
+			hoverStart: hover,
+			verticalMode: verticalMode,
+			startingPoint: 50,
+			fluidMode: false,
+		};
+	};
+
+	console.log("parent", imageViewer);
+
+	useEffect(() => {
+		console.log("empty");
+		const options = generateOptions();
+		if (hasBothImages) {
+			const newImageViewer = new ImageCompare(imageViewerRef.current, options);
+			setImageViewer(newImageViewer);
+			newImageViewer.mount();
+			console.log(newImageViewer);
+		}
+
+		console.log("inside effect", imageViewer);
+
+		return () => {
+			imageViewerRef.current = null;
+		};
+	}, [attributes]);
+
+	// useEffect(() => {
+	// 	console.log("att");
+	// 	if (imageViewer) {
+	// 		imageViewer = null;
+	// 		const newImageViewer = new ImageCompare(
+	// 			imageViewerRef.current,
+	// 			generateOptions()
+	// 		);
+	// 		setImageViewer(newImageViewer);
+	// 		newImageViewer.mount();
+	// 	}
+	// }, [attributes]);
+
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 	useEffect(() => {
 		setAttributes({
@@ -52,7 +129,7 @@ const edit = (props) => {
 
 	// this useEffect is for creating an unique id for each block's unique className by a random unique number
 	useEffect(() => {
-		const BLOCK_PREFIX = "eb-typing-text";
+		const BLOCK_PREFIX = "eb-image-comparison";
 		duplicateBlockIdFix({
 			BLOCK_PREFIX,
 			blockId,
@@ -74,13 +151,52 @@ const edit = (props) => {
 		className: `eb-guten-block-main-parent-wrapper`,
 	});
 
-	useEffect(() => {
-		const viewers = document.querySelectorAll(".image-compare");
-		console.log("edit", viewers);
-		viewers.forEach((element) => {
-			let view = new ImageCompare(element).mount();
-		});
-	}, []);
+	// useEffect(() => {
+	// 	const viewers = document.querySelectorAll(".eb-image-comparison-wrapper");
+	// 	var el = "";
+	// 	viewers.forEach((element) => {
+	// 		const imageElement = element.querySelector(".eb-image-compare");
+	// 		{
+	// 			imageElement && el = imageElement.parentNode;
+	// 			const options = {
+	// 				// UI Theme Defaults
+	// 				addCircle: circleControl,
+	// 				addCircleBlur: circleBlur,
+
+	// 				// Label Defaults
+	// 				showLabels: showLabels,
+	// 				labelOptions: {
+	// 					before: beforeLabel,
+	// 					after: afterLabel,
+	// 					onHover: labelsOnHover,
+	// 				},
+
+	// 				// Smoothing
+	// 				smoothing: true,
+	// 				smoothingAmount: 100,
+
+	// 				// Other options
+
+	// 				hoverStart: hover,
+	// 				verticalMode: verticalMode,
+	// 				startingPoint: 50,
+	// 				fluidMode: false,
+	// 			};
+
+	// 			console.log(options);
+
+	// 			if (options.verticalMode) {
+	// 				element.classList.remove("icv__icv--horizontal");
+	// 			} else {
+	// 				element.classList.remove("icv__icv--vertical");
+	// 			}
+	// 			let view = new ImageCompare(imageElement, options).mount();
+	// 		}
+	// 	});
+	// 	return () => {
+	// 		console.log(el);
+	// 	};
+	// }, [attributes]);
 
 	// all css styles for large screen width (desktop/laptop) in strings ⬇
 	const desktopAllStyles = softMinifyCssStrings(``);
@@ -112,9 +228,9 @@ const edit = (props) => {
 				setAttributes={setAttributes}
 			/>
 		),
-		<div className="eb-image-comparison-wrapper">
+		<div className={`eb-image-comparison-wrapper ${blockId}`}>
 			{hasBothImages ? (
-				<div className="image-compare">
+				<div className="eb-image-compare" ref={imageViewerRef}>
 					<img className="eb-image-comparison-left" src={leftImageURL} alt="" />
 					<img
 						className="eb-image-comparison-right"
@@ -137,7 +253,7 @@ const edit = (props) => {
 									onClick={open}
 								/>
 							) : (
-								<img src={leftImageURL} />
+								<img className="eb-image-comparison-image" src={leftImageURL} />
 							)
 						}
 					/>
@@ -154,7 +270,10 @@ const edit = (props) => {
 									onClick={open}
 								/>
 							) : (
-								<img src={rightImageURL} />
+								<img
+									className="eb-image-comparison-image"
+									src={rightImageURL}
+								/>
 							)
 						}
 					/>

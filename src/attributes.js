@@ -36,6 +36,26 @@ const attributes = {
 		type: "boolean",
 		default: false,
 	},
+	verticalMode: {
+		type: "boolean",
+		default: false,
+	},
+	circleControl: {
+		type: "boolean",
+		default: true,
+	},
+	circleBlur: {
+		type: "boolean",
+		default: true,
+	},
+	showLabels: {
+		type: "boolean",
+		default: false,
+	},
+	labelsOnHover: {
+		type: "boolean",
+		default: false,
+	},
 	fullWidth: {
 		type: "boolean",
 		default: true,
@@ -45,10 +65,6 @@ const attributes = {
 	},
 	position: {
 		type: "number",
-	},
-	overlay: {
-		type: "boolaen",
-		default: true,
 	},
 	beforeLabel: {
 		type: "string",
