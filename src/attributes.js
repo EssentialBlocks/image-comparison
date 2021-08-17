@@ -23,14 +23,14 @@ const attributes = {
 	leftImageURL: {
 		type: "string",
 		source: "attribute",
-		attribute: "src",
-		selector: ".eb-image-comparison-left",
+		attribute: "data-left-image",
+		selector: ".eb-image-comparison-wrapper",
 	},
 	rightImageURL: {
 		type: "string",
 		source: "attribute",
-		attribute: "src",
-		selector: ".eb-image-comparison-right",
+		attribute: "data-right-image",
+		selector: ".eb-image-comparison-wrapper",
 	},
 	hover: {
 		type: "boolean",
@@ -65,6 +65,7 @@ const attributes = {
 	},
 	position: {
 		type: "number",
+		default: 50,
 	},
 	beforeLabel: {
 		type: "string",

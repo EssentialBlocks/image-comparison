@@ -1,3 +1,5 @@
+const { useBlockProps } = wp.blockEditor;
+
 const Save = ({ attributes }) => {
 	const {
 		blockId,
@@ -23,21 +25,14 @@ const Save = ({ attributes }) => {
 	} = attributes;
 	return (
 		<>
-			<div
-				className={`eb-image-comparison-wrapper ${blockId}`}
-				data-hover-start={hover}
-				data-vertical-mode={verticalMode}
-				data-circle-control={circleControl}
-				data-circle-blur={circleBlur}
-			>
-				<div className="eb-image-compare">
-					<img className="eb-image-comparison-left" src={leftImageURL} alt="" />
-					<img
-						className="eb-image-comparison-right"
-						src={rightImageURL}
-						alt=""
-					/>
-				</div>
+			<div {...useBlockProps.save()}>
+				<div
+					className={`eb-image-comparison-wrapper ${blockId}`}
+					data-left-image={leftImageURL}
+					data-right-image={rightImageURL}
+					data-vertical-mode={verticalMode}
+					data-hover={hover}
+				></div>
 			</div>
 		</>
 	);

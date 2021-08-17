@@ -7,7 +7,7 @@ const { useState, useRef, useEffect } = wp.element;
  * Internal Import
  */
 import "./editor.scss";
-import ImageCompare from "image-compare-viewer";
+import ReactCompareImage from "react-compare-image";
 import Inspector from "./inspector";
 import {
 	softMinifyCssStrings,
@@ -34,7 +34,6 @@ const edit = (props) => {
 		circleControl,
 		circleBlur,
 		showLabels,
-		labelsOnHover,
 		beforeLabel,
 		afterLabel,
 		fullWidth,
@@ -46,79 +45,6 @@ const edit = (props) => {
 		lineColor,
 		arrowColor,
 	} = attributes;
-
-	const imageViewerRef = useRef(null);
-	var [imageViewer, setImageViewer] = useState(null);
-
-	const generateOptions = () => {
-		// Generate options for Typed instance
-		const {
-			hover,
-			verticalMode,
-			circleControl,
-			circleBlur,
-			showLabels,
-			labelsOnHover,
-			beforeLabel,
-			afterLabel,
-		} = attributes;
-
-		return {
-			// UI Theme Defaults
-			addCircle: circleControl,
-			addCircleBlur: circleBlur,
-
-			// Label Defaults
-			showLabels: showLabels,
-			labelOptions: {
-				before: beforeLabel,
-				after: afterLabel,
-				onHover: labelsOnHover,
-			},
-
-			// Smoothing
-			smoothing: true,
-			smoothingAmount: 100,
-
-			// Other options
-			hoverStart: hover,
-			verticalMode: verticalMode,
-			startingPoint: 50,
-			fluidMode: false,
-		};
-	};
-
-	console.log("parent", imageViewer);
-
-	useEffect(() => {
-		console.log("empty");
-		const options = generateOptions();
-		if (hasBothImages) {
-			const newImageViewer = new ImageCompare(imageViewerRef.current, options);
-			setImageViewer(newImageViewer);
-			newImageViewer.mount();
-			console.log(newImageViewer);
-		}
-
-		console.log("inside effect", imageViewer);
-
-		return () => {
-			imageViewerRef.current = null;
-		};
-	}, [attributes]);
-
-	// useEffect(() => {
-	// 	console.log("att");
-	// 	if (imageViewer) {
-	// 		imageViewer = null;
-	// 		const newImageViewer = new ImageCompare(
-	// 			imageViewerRef.current,
-	// 			generateOptions()
-	// 		);
-	// 		setImageViewer(newImageViewer);
-	// 		newImageViewer.mount();
-	// 	}
-	// }, [attributes]);
 
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 	useEffect(() => {
@@ -150,53 +76,6 @@ const edit = (props) => {
 	const blockProps = useBlockProps({
 		className: `eb-guten-block-main-parent-wrapper`,
 	});
-
-	// useEffect(() => {
-	// 	const viewers = document.querySelectorAll(".eb-image-comparison-wrapper");
-	// 	var el = "";
-	// 	viewers.forEach((element) => {
-	// 		const imageElement = element.querySelector(".eb-image-compare");
-	// 		{
-	// 			imageElement && el = imageElement.parentNode;
-	// 			const options = {
-	// 				// UI Theme Defaults
-	// 				addCircle: circleControl,
-	// 				addCircleBlur: circleBlur,
-
-	// 				// Label Defaults
-	// 				showLabels: showLabels,
-	// 				labelOptions: {
-	// 					before: beforeLabel,
-	// 					after: afterLabel,
-	// 					onHover: labelsOnHover,
-	// 				},
-
-	// 				// Smoothing
-	// 				smoothing: true,
-	// 				smoothingAmount: 100,
-
-	// 				// Other options
-
-	// 				hoverStart: hover,
-	// 				verticalMode: verticalMode,
-	// 				startingPoint: 50,
-	// 				fluidMode: false,
-	// 			};
-
-	// 			console.log(options);
-
-	// 			if (options.verticalMode) {
-	// 				element.classList.remove("icv__icv--horizontal");
-	// 			} else {
-	// 				element.classList.remove("icv__icv--vertical");
-	// 			}
-	// 			let view = new ImageCompare(imageElement, options).mount();
-	// 		}
-	// 	});
-	// 	return () => {
-	// 		console.log(el);
-	// 	};
-	// }, [attributes]);
 
 	// all css styles for large screen width (desktop/laptop) in strings ⬇
 	const desktopAllStyles = softMinifyCssStrings(``);
@@ -230,14 +109,15 @@ const edit = (props) => {
 		),
 		<div className={`eb-image-comparison-wrapper ${blockId}`}>
 			{hasBothImages ? (
-				<div className="eb-image-compare" ref={imageViewerRef}>
-					<img className="eb-image-comparison-left" src={leftImageURL} alt="" />
-					<img
-						className="eb-image-comparison-right"
-						src={rightImageURL}
-						alt=""
-					/>
-				</div>
+				<ReactCompareImage
+					leftImage={leftImageURL}
+					rightImage={rightImageURL}
+					{...(verticalMode ? { vertical: "vertical" } : {})}
+					{...(hover ? { hover: "hover" } : {})}
+					{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
+					{...(showLabels ? { rightImageLabel: afterLabel } : {})}
+					sliderPositionPercentage={position / 100}
+				/>
 			) : (
 				<div className="eb-image-comparison-placeholder">
 					<MediaUpload

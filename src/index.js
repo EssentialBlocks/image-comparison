@@ -7,9 +7,9 @@ import save from "./Save";
 import icon from "./icon";
 import attributes from "./attributes";
 
-registerBlockType("block/image-comparison", {
-	title: __("Image Comparison", "block"),
-	description: __("", "block"),
+registerBlockType("image-comparison/image-comparison", {
+	title: __("Image Comparison", "image-comparison"),
+	description: __("", "image-comparison"),
 	category: "widgets",
 	keywords: [__("image compare"), __("comparison"), __("compare")],
 	attributes,

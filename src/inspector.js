@@ -166,13 +166,6 @@ const Inspector = ({ attributes, setAttributes }) => {
 										/>
 										{showLabels && (
 											<>
-												<ToggleControl
-													label={__("Show Labels On Hover", "image-comparison")}
-													checked={labelsOnHover}
-													onChange={() =>
-														setAttributes({ labelsOnHover: !labelsOnHover })
-													}
-												/>
 												<TextControl
 													label={__("Before Label", "image-comparison")}
 													value={beforeLabel}
@@ -189,6 +182,17 @@ const Inspector = ({ attributes, setAttributes }) => {
 												/>
 											</>
 										)}
+										<ResetControl
+											onReset={() => setAttributes({ position: undefined })}
+										>
+											<RangeControl
+												label={__("Slider Position", "image-comparison")}
+												value={position}
+												onChange={(position) => setAttributes({ position })}
+												min={0}
+												max={100}
+											/>
+										</ResetControl>
 
 										<ToggleControl
 											label={__("Full Width")}
@@ -217,18 +221,6 @@ const Inspector = ({ attributes, setAttributes }) => {
 												/>
 											</ResetControl>
 										)}
-
-										<ResetControl
-											onReset={() => setAttributes({ lineWidth: undefined })}
-										>
-											<RangeControl
-												label={__("Line Width")}
-												value={lineWidth}
-												onChange={(lineWidth) => setAttributes({ lineWidth })}
-												min={0}
-												max={20}
-											/>
-										</ResetControl>
 									</PanelBody>
 
 									<PanelColorSettings

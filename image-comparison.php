@@ -22,7 +22,7 @@
  */
 define('IMAGE_COMPARISON_DIR', dirname(__FILE__));
 
-require_once __DIR__ . '/includes/admin-enqueue.php';
+// require_once __DIR__ . '/includes/admin-enqueue.php';
 require_once __DIR__ . '/lib/style-handler/style-handler.php';
 
 function create_block_image_comparison_block_init()
@@ -56,53 +56,22 @@ function create_block_image_comparison_block_init()
     filemtime("$dir/$editor_css")
   );
 
-  // $style_css = 'build/style-index.css';
-  // wp_register_style(
-  // 	'eb-image-comparison-block',
-  // 	plugins_url( $style_css, __FILE__ ),
-  // 	array(),
-  // 	filemtime( "$dir/$style_css" )
-  // );
-
-  $image_viewer_css = 'assets/css/image-compare-viewer.css';
-  wp_register_style(
-    'eb-image-comparison-viewer-css',
-    plugins_url($image_viewer_css, __FILE__),
-    array(),
-    filemtime("$dir/$image_viewer_css"),
-    "all"
-  );
-
-
-  $image_viewer = 'assets/js/image-compare-viewer.min.js';
-  wp_register_script(
-    'eb-image-comparison-viewer',
-    plugins_url($image_viewer, __FILE__),
-    array(),
-    filemtime("$dir/$image_viewer"),
-    true
-  );
-
-
-  $frontend_js = 'assets/js/frontend.js';
+  $frontend_js = 'build/frontend.js';
   wp_register_script(
     'eb-image-comparison-frontend',
     plugins_url($frontend_js, __FILE__),
-    array(),
+    array("wp-element"),
     filemtime("$dir/$frontend_js"),
     true,
   );
 
 
   if (!WP_Block_Type_Registry::get_instance()->is_registered('essential-blocks/image-comparison')) {
-    register_block_type('block/image-comparison', array(
+    register_block_type('image-comparison/image-comparison', array(
       'editor_script' => 'eb-image-comparison-block-editor',
       'editor_style'  => 'eb-image-comparison-block-editor',
-      //   'style'         => 'eb-image-comparison-block',
       'render_callback' => function ($attributes, $content) {
         if (!is_admin()) {
-          wp_enqueue_style("eb-image-comparison-viewer-css");
-          wp_enqueue_script('eb-image-comparison-viewer');
           wp_enqueue_script('eb-image-comparison-frontend');
         }
         return $content;
