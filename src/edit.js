@@ -20,6 +20,8 @@ import {
 	generateResponsiveRangeStyles,
 } from "../util/helpers";
 
+import { CONTENT_POSITION, IMAGE_WIDTH } from "./constants";
+
 const edit = (props) => {
 	const { attributes, setAttributes, clientId, isSelected } = props;
 	const {
@@ -31,8 +33,6 @@ const edit = (props) => {
 		rightImageURL,
 		hover,
 		verticalMode,
-		circleControl,
-		circleBlur,
 		showLabels,
 		beforeLabel,
 		afterLabel,
@@ -43,8 +43,49 @@ const edit = (props) => {
 		swap,
 		lineWidth,
 		lineColor,
-		arrowColor,
+		contentPosition,
 	} = attributes;
+
+	const {
+		rangeStylesDesktop: imageWidthDesktop,
+		rangeStylesTab: imageWidthTab,
+		rangeStylesMobile: imageWidthMobile,
+	} = generateResponsiveRangeStyles({
+		controlName: IMAGE_WIDTH,
+		property: "max-width",
+		attributes,
+		customUnit: "px",
+	});
+
+	const desktopStyles = `
+		.eb-image-comparison-align-center {
+			margin-right: auto !important;
+			margin-left: auto !important;
+		}
+		.eb-image-comparison-align-right {
+			margin-left: auto !important;
+		}
+		.eb-image-comparison-wrapper.${blockId} {
+			${imageWidthDesktop}
+		}
+
+		div[data-testid="container"] >div:nth-child(4) div,
+		div[data-testid="container"] >div:nth-child(5) div {
+			background-color: red!important;
+		}
+	`;
+
+	const tabStyles = `
+		.eb-image-comparison-wrapper.${blockId} {
+			${imageWidthTab}
+		}
+	`;
+
+	const mobileStyles = `
+		.eb-image-comparison-wrapper.${blockId} {
+			${imageWidthMobile}
+		}
+	`;
 
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 	useEffect(() => {
@@ -78,13 +119,19 @@ const edit = (props) => {
 	});
 
 	// all css styles for large screen width (desktop/laptop) in strings ⬇
-	const desktopAllStyles = softMinifyCssStrings(``);
+	const desktopAllStyles = softMinifyCssStrings(`
+		${isCssExists(desktopStyles) ? desktopStyles : " "}
+	`);
 
 	// all css styles for Tab in strings ⬇
-	const tabAllStyles = softMinifyCssStrings(``);
+	const tabAllStyles = softMinifyCssStrings(`
+		${isCssExists(tabStyles) ? tabStyles : " "}
+	`);
 
 	// all css styles for Mobile in strings ⬇
-	const mobileAllStyles = softMinifyCssStrings(``);
+	const mobileAllStyles = softMinifyCssStrings(`
+		${isCssExists(mobileStyles) ? mobileStyles : " "}
+	`);
 	// Set All Style in "blockMeta" Attribute
 	useEffect(() => {
 		const styleObject = {
@@ -98,6 +145,19 @@ const edit = (props) => {
 	}, [attributes]);
 
 	const hasBothImages = leftImageURL && rightImageURL;
+	const alignmentClass =
+		contentPosition === "center"
+			? " eb-image-comparison-align-center"
+			: contentPosition === "right"
+			? " eb-image-comparison-align-right"
+			: "";
+	const onImageSwap = () => {
+		let { leftImageURL, rightImageURL, swap } = attributes;
+		swap = !swap;
+		[leftImageURL, rightImageURL] = [rightImageURL, leftImageURL];
+
+		setAttributes({ swap, leftImageURL, rightImageURL });
+	};
 
 	return [
 		isSelected && (
@@ -105,60 +165,98 @@ const edit = (props) => {
 				key="inspector"
 				attributes={attributes}
 				setAttributes={setAttributes}
+				onImageSwap={onImageSwap}
 			/>
 		),
-		<div className={`eb-image-comparison-wrapper ${blockId}`}>
-			{hasBothImages ? (
-				<ReactCompareImage
-					leftImage={leftImageURL}
-					rightImage={rightImageURL}
-					{...(verticalMode ? { vertical: "vertical" } : {})}
-					{...(hover ? { hover: "hover" } : {})}
-					{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
-					{...(showLabels ? { rightImageLabel: afterLabel } : {})}
-					sliderPositionPercentage={position / 100}
-				/>
-			) : (
-				<div className="eb-image-comparison-placeholder">
-					<MediaUpload
-						onSelect={(media) => setAttributes({ leftImageURL: media.url })}
-						type="image"
-						value={leftImageURL}
-						render={({ open }) =>
-							!leftImageURL ? (
-								<Button
-									className="eb-image-comparison-upload components-button"
-									label={__("Upload Left Image")}
-									icon="format-image"
-									onClick={open}
-								/>
-							) : (
-								<img className="eb-image-comparison-image" src={leftImageURL} />
-							)
-						}
+		<div {...blockProps}>
+			<style>
+				{`
+				 ${desktopAllStyles}
+ 
+				 /* mimmikcssStart */
+ 
+				 ${resOption === "Tablet" ? tabAllStyles : " "}
+				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
+ 
+				 /* mimmikcssEnd */
+ 
+				 @media all and (max-width: 1024px) {	
+ 
+					 /* tabcssStart */			
+					 ${softMinifyCssStrings(tabAllStyles)}
+					 /* tabcssEnd */			
+				 
+				 }
+				 
+				 @media all and (max-width: 767px) {
+					 
+					 /* mobcssStart */			
+					 ${softMinifyCssStrings(mobileAllStyles)}
+					 /* mobcssEnd */			
+				 
+				 }
+				 `}
+			</style>
+			<div
+				className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}`}
+			>
+				{hasBothImages ? (
+					<ReactCompareImage
+						leftImage={leftImageURL}
+						rightImage={rightImageURL}
+						{...(verticalMode ? { vertical: "vertical" } : {})}
+						{...(hover ? { hover: "hover" } : {})}
+						{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
+						{...(showLabels ? { rightImageLabel: afterLabel } : {})}
+						sliderPositionPercentage={position / 100}
+						sliderLineWidth={lineWidth ? lineWidth : 0}
+						sliderLineColor={lineColor}
 					/>
-					<MediaUpload
-						onSelect={(media) => setAttributes({ rightImageURL: media.url })}
-						type="image"
-						value={rightImageURL}
-						render={({ open }) =>
-							!rightImageURL ? (
-								<Button
-									className="eb-image-comparison-upload components-button"
-									label={__("Upload Right Image")}
-									icon="format-image"
-									onClick={open}
-								/>
-							) : (
-								<img
-									className="eb-image-comparison-image"
-									src={rightImageURL}
-								/>
-							)
-						}
-					/>
-				</div>
-			)}
+				) : (
+					<div className="eb-image-comparison-placeholder">
+						<MediaUpload
+							onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+							type="image"
+							value={leftImageURL}
+							render={({ open }) =>
+								!leftImageURL ? (
+									<Button
+										className="eb-image-comparison-upload components-button"
+										label={__("Upload Left Image")}
+										icon="format-image"
+										onClick={open}
+									/>
+								) : (
+									<img
+										className="eb-image-comparison-image"
+										src={leftImageURL}
+									/>
+								)
+							}
+						/>
+						<MediaUpload
+							onSelect={(media) => setAttributes({ rightImageURL: media.url })}
+							type="image"
+							value={rightImageURL}
+							render={({ open }) =>
+								!rightImageURL ? (
+									<Button
+										className="eb-image-comparison-upload components-button"
+										label={__("Upload Right Image")}
+										icon="format-image"
+										onClick={open}
+									/>
+								) : (
+									<img
+										className="eb-image-comparison-image"
+										src={rightImageURL}
+									/>
+								)
+							}
+						/>
+					</div>
+				)}
+			</div>
 		</div>,
 	];
 };

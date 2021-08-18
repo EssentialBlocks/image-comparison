@@ -10,6 +10,8 @@ const {
 	RangeControl,
 	TextControl,
 	TabPanel,
+	ButtonGroup,
+	Button,
 } = wp.components;
 const { useEffect } = wp.element;
 const { select } = wp.data;
@@ -24,8 +26,11 @@ import {
 import objAttributes from "./attributes";
 import ImageAvatar from "../util/image-avatar";
 import ResetControl from "../util/reset-control";
+import ColorControl from "../util/color-control";
+import ResponsiveRangeController from "../util/responsive-range-control";
+import { CONTENT_POSITION, IMAGE_WIDTH } from "./constants";
 
-const Inspector = ({ attributes, setAttributes }) => {
+const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 	const {
 		resOption,
 		leftImageURL,
@@ -45,7 +50,7 @@ const Inspector = ({ attributes, setAttributes }) => {
 		swap,
 		lineWidth,
 		lineColor,
-		arrowColor,
+		contentPosition,
 	} = attributes;
 
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class only the first time once
@@ -129,6 +134,45 @@ const Inspector = ({ attributes, setAttributes }) => {
 												</BaseControl>
 											)}
 										</>
+										<BaseControl
+											label={__("Alignment", "flipbox")}
+											id="eb-button-group-alignment"
+										>
+											<ButtonGroup id="eb-button-group-alignment">
+												{CONTENT_POSITION.map((item) => (
+													<Button
+														isLarge
+														isPrimary={contentPosition === item.value}
+														isSecondary={contentPosition !== item.value}
+														onClick={() =>
+															setAttributes({
+																contentPosition: item.value,
+															})
+														}
+													>
+														{item.label}
+													</Button>
+												))}
+											</ButtonGroup>
+										</BaseControl>
+										<ToggleControl
+											label={__("Full Width", "image-comparison")}
+											checked={fullWidth}
+											onChange={() => setAttributes({ fullWidth: !fullWidth })}
+										/>
+										{!fullWidth && (
+											<>
+												<ResponsiveRangeController
+													baseLabel={__("Image Width", "image-comparion")}
+													controlName={IMAGE_WIDTH}
+													resRequiredProps={resRequiredProps}
+													min={0}
+													max={1000}
+													step={1}
+													noUnits
+												/>
+											</>
+										)}
 										<ToggleControl
 											label={__("Move on Hover", "image-comparison")}
 											checked={hover}
@@ -141,22 +185,6 @@ const Inspector = ({ attributes, setAttributes }) => {
 												setAttributes({ verticalMode: !verticalMode })
 											}
 										/>
-										<ToggleControl
-											label={__("Circle Control", "image-comparison")}
-											checked={circleControl}
-											onChange={() =>
-												setAttributes({ circleControl: !circleControl })
-											}
-										/>
-										{circleControl && (
-											<ToggleControl
-												label={__("Blur Circle", "image-comparison")}
-												checked={circleBlur}
-												onChange={() =>
-													setAttributes({ circleBlur: !circleBlur })
-												}
-											/>
-										)}
 										<ToggleControl
 											label={__("Show Labels", "image-comparison")}
 											checked={showLabels}
@@ -182,8 +210,17 @@ const Inspector = ({ attributes, setAttributes }) => {
 												/>
 											</>
 										)}
+										<ToggleControl
+											label={__("Swap Images")}
+											checked={swap}
+											onChange={() => onImageSwap()}
+										/>
 										<ResetControl
-											onReset={() => setAttributes({ position: undefined })}
+											onReset={() =>
+												setAttributes({
+													position: objAttributes.position.default,
+												})
+											}
 										>
 											<RangeControl
 												label={__("Slider Position", "image-comparison")}
@@ -191,55 +228,38 @@ const Inspector = ({ attributes, setAttributes }) => {
 												onChange={(position) => setAttributes({ position })}
 												min={0}
 												max={100}
+												help={__(
+													"Update & reload to see effect in backend",
+													"image-comparison"
+												)}
 											/>
 										</ResetControl>
-
-										<ToggleControl
-											label={__("Full Width")}
-											checked={fullWidth}
-											onChange={() => setAttributes({ fullWidth: !fullWidth })}
-										/>
-
-										<ToggleControl
-											label={__("Swap Images")}
-											checked={swap}
-											onChange={() => onImageSwap()}
-										/>
-
-										{!fullWidth && (
-											<ResetControl
-												onReset={() => setAttributes({ imageWidth: undefined })}
-											>
-												<RangeControl
-													label={__("Image Width")}
-													value={imageWidth}
-													onChange={(imageWidth) =>
-														setAttributes({ imageWidth })
-													}
-													min={0}
-													max={600}
-												/>
-											</ResetControl>
-										)}
+										<ResetControl
+											onReset={() =>
+												setAttributes({
+													lineWidth: objAttributes.lineWidth.default,
+												})
+											}
+										>
+											<RangeControl
+												label={__("Slider Line Width", "image-comparison")}
+												value={lineWidth}
+												onChange={(lineWidth) => setAttributes({ lineWidth })}
+												min={1}
+												max={10}
+											/>
+										</ResetControl>
 									</PanelBody>
-
-									<PanelColorSettings
-										title={__("Colors")}
-										initialOpen={false}
-										colorSettings={[
-											{
-												value: lineColor,
-												onChange: (lineColor) => setAttributes({ lineColor }),
-												label: __("Line Color"),
-											},
-											{
-												value: arrowColor,
-												onChange: (arrowColor) => setAttributes({ arrowColor }),
-												label: __("Arrow Color"),
-											},
-										]}
-									/>
 								</>
+							)}
+							{tab.name === "styles" && (
+								<PanelBody>
+									<ColorControl
+										label={__("Line Color", "image-comparison")}
+										color={lineColor}
+										onChange={(lineColor) => setAttributes({ lineColor })}
+									/>
+								</PanelBody>
 							)}
 						</div>
 					)}

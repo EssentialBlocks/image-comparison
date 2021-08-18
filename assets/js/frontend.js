@@ -11,13 +11,23 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		let rightImage = wrapper.getAttribute("data-right-image");
 		let verticalMode = wrapper.getAttribute("data-vertical-mode");
 		let hover = wrapper.getAttribute("data-hover");
-		console.log(typeof verticalMode, typeof hover);
+		let showLabels = wrapper.getAttribute("data-show-label");
+		let beforeLabel = wrapper.getAttribute("data-left-label");
+		let afterLabel = wrapper.getAttribute("data-right-label");
+		let sliderPosition = wrapper.getAttribute("data-slider-position");
+		let sliderLineWidth = wrapper.getAttribute("data-line-width");
+		let sliderLineColor = wrapper.getAttribute("data-line-color");
 		render(
 			<ReactCompareImage
 				leftImage={leftImage}
 				rightImage={rightImage}
 				{...(verticalMode == "true" ? { vertical: "vertical" } : {})}
 				{...(hover == "true" ? { hover: "hover" } : {})}
+				{...(showLabels == "true" ? { leftImageLabel: beforeLabel } : {})}
+				{...(showLabels == "true" ? { rightImageLabel: afterLabel } : {})}
+				sliderPositionPercentage={sliderPosition ? sliderPosition / 100 : 0.5}
+				sliderLineWidth={sliderLineWidth ? sliderLineWidth : 0}
+				sliderLineColor={sliderLineColor ? sliderLineColor : "#ffffff"}
 			/>,
 			wrapper
 		);

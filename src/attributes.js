@@ -1,3 +1,9 @@
+import { IMAGE_WIDTH } from "./constants";
+import {
+	generateTypographyAttributes,
+	generateResponsiveRangeAttributes,
+	generateDimensionsAttributes,
+} from "../util/helpers";
 const attributes = {
 	// the following 4 attributes is must required for responsive options and asset generation for frontend
 	// responsive control attributes ⬇
@@ -81,6 +87,7 @@ const attributes = {
 	},
 	lineWidth: {
 		type: "number",
+		default: 4,
 	},
 	lineColor: {
 		type: "string",
@@ -88,6 +95,13 @@ const attributes = {
 	arrowColor: {
 		type: "string",
 	},
+	contentPosition: {
+		type: "string",
+		default: "center",
+	},
+	...generateResponsiveRangeAttributes(IMAGE_WIDTH, {
+		noUnits: true,
+	}),
 };
 
 export default attributes;
