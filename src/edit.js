@@ -2,7 +2,7 @@ const { useBlockProps, MediaUpload } = wp.blockEditor;
 const { select } = wp.data;
 const { Button } = wp.components;
 const { __ } = wp.i18n;
-const { useState, useRef, useEffect } = wp.element;
+const { useEffect } = wp.element;
 /**
  * Internal Import
  */
@@ -15,12 +15,12 @@ import {
 	mimmikCssForPreviewBtnClick,
 	duplicateBlockIdFix,
 	generateDimensionsControlStyles,
-	generateBorderShadowStyles,
 	generateTypographyStyles,
 	generateResponsiveRangeStyles,
 } from "../util/helpers";
 
-import { CONTENT_POSITION, IMAGE_WIDTH } from "./constants";
+import { IMAGE_WIDTH, WRAPPER_MARGIN, WRAPPER_PADDING } from "./constants";
+import { typoPrefix_label } from "./constants/typographyConstants";
 
 const edit = (props) => {
 	const { attributes, setAttributes, clientId, isSelected } = props;
@@ -44,6 +44,9 @@ const edit = (props) => {
 		lineWidth,
 		lineColor,
 		contentPosition,
+		noHandle,
+		labelColor,
+		labelBackgroundColor,
 	} = attributes;
 
 	const {
@@ -57,6 +60,38 @@ const edit = (props) => {
 		customUnit: "px",
 	});
 
+	// wrapper margin
+	const {
+		dimensionStylesDesktop: wrapperMarginDesktop,
+		dimensionStylesTab: wrapperMarginTab,
+		dimensionStylesMobile: wrapperMarginMobile,
+	} = generateDimensionsControlStyles({
+		controlName: WRAPPER_MARGIN,
+		styleFor: "margin",
+		attributes,
+	});
+
+	// wrapper padding
+	const {
+		dimensionStylesDesktop: wrapperPaddingDesktop,
+		dimensionStylesTab: wrapperPaddingTab,
+		dimensionStylesMobile: wrapperPaddingMobile,
+	} = generateDimensionsControlStyles({
+		controlName: WRAPPER_PADDING,
+		styleFor: "padding",
+		attributes,
+	});
+
+	// label typography
+	const {
+		typoStylesDesktop: labelTypoStylesDesktop,
+		typoStylesTab: labelTypoStylesTab,
+		typoStylesMobile: labelTypoStylesMobile,
+	} = generateTypographyStyles({
+		attributes,
+		prefixConstant: typoPrefix_label,
+	});
+
 	const desktopStyles = `
 		.eb-image-comparison-align-center {
 			margin-right: auto !important;
@@ -66,24 +101,64 @@ const edit = (props) => {
 			margin-left: auto !important;
 		}
 		.eb-image-comparison-wrapper.${blockId} {
-			${imageWidthDesktop}
+			${wrapperMarginDesktop}
+			${wrapperPaddingDesktop}
+			${!fullWidth ? imageWidthDesktop : ""}
 		}
 
-		div[data-testid="container"] >div:nth-child(4) div,
-		div[data-testid="container"] >div:nth-child(5) div {
-			background-color: red!important;
+		${
+			showLabels
+				? `
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
+				${labelTypoStylesDesktop}
+				${labelColor ? `color: ${labelColor} !important;` : ""}
+				${
+					labelBackgroundColor
+						? `background-color: ${labelBackgroundColor} !important;`
+						: ""
+				}
+			}
+			`
+				: ""
 		}
 	`;
 
 	const tabStyles = `
 		.eb-image-comparison-wrapper.${blockId} {
-			${imageWidthTab}
+			${wrapperMarginTab}
+			${wrapperPaddingTab}
+			${!fullWidth ? imageWidthTab : ""}
+		}
+
+		${
+			showLabels
+				? `
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
+				${labelTypoStylesTab}
+			}
+			`
+				: ""
 		}
 	`;
 
 	const mobileStyles = `
 		.eb-image-comparison-wrapper.${blockId} {
-			${imageWidthMobile}
+			${wrapperMarginMobile}
+			${wrapperPaddingMobile}
+			${!fullWidth ? imageWidthMobile : ""}
+		}
+
+		${
+			showLabels
+				? `
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
+				${labelTypoStylesMobile}
+			}
+			`
+				: ""
 		}
 	`;
 
@@ -208,6 +283,7 @@ const edit = (props) => {
 						{...(hover ? { hover: "hover" } : {})}
 						{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
 						{...(showLabels ? { rightImageLabel: afterLabel } : {})}
+						{...(noHandle ? { handle: <React.Fragment /> } : {})}
 						sliderPositionPercentage={position / 100}
 						sliderLineWidth={lineWidth ? lineWidth : 0}
 						sliderLineColor={lineColor}

@@ -23,6 +23,7 @@ const Save = ({ attributes }) => {
 		lineWidth,
 		lineColor,
 		contentPosition,
+		noHandle,
 	} = attributes;
 	const alignmentClass =
 		contentPosition === "center"
@@ -45,6 +46,7 @@ const Save = ({ attributes }) => {
 					data-slider-position={position}
 					data-line-width={lineWidth}
 					data-line-color={lineColor}
+					data-handle={noHandle}
 				></div>
 			</div>
 		</>

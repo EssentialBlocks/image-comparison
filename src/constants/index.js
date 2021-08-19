@@ -8,3 +8,7 @@ export const CONTENT_POSITION = [
 ];
 
 export const IMAGE_WIDTH = "imgWidth";
+
+// dimension control
+export const WRAPPER_MARGIN = "wrpMargin";
+export const WRAPPER_PADDING = "wrpPadding";

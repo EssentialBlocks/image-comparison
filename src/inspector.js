@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 const { __ } = wp.i18n;
-const { InspectorControls, PanelColorSettings } = wp.blockEditor;
+const { InspectorControls } = wp.blockEditor;
 const {
 	PanelBody,
 	BaseControl,
@@ -28,7 +28,15 @@ import ImageAvatar from "../util/image-avatar";
 import ResetControl from "../util/reset-control";
 import ColorControl from "../util/color-control";
 import ResponsiveRangeController from "../util/responsive-range-control";
-import { CONTENT_POSITION, IMAGE_WIDTH } from "./constants";
+import ResponsiveDimensionsControl from "../util/dimensions-control-v2";
+import TypographyDropdown from "../util/typography-control-v2";
+import {
+	CONTENT_POSITION,
+	IMAGE_WIDTH,
+	WRAPPER_PADDING,
+	WRAPPER_MARGIN,
+} from "./constants";
+import { typoPrefix_label } from "./constants/typographyConstants";
 
 const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 	const {
@@ -37,20 +45,18 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 		rightImageURL,
 		hover,
 		verticalMode,
-		circleControl,
-		circleBlur,
 		showLabels,
-		labelsOnHover,
 		beforeLabel,
 		afterLabel,
 		fullWidth,
-		imageWidth,
-		overlay,
 		position,
 		swap,
 		lineWidth,
 		lineColor,
 		contentPosition,
+		noHandle,
+		labelColor,
+		labelBackgroundColor,
 	} = attributes;
 
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class only the first time once
@@ -215,6 +221,11 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											checked={swap}
 											onChange={() => onImageSwap()}
 										/>
+										<ToggleControl
+											label={__("No Handle", "image-comparison")}
+											checked={noHandle}
+											onChange={() => setAttributes({ noHandle: !noHandle })}
+										/>
 										<ResetControl
 											onReset={() =>
 												setAttributes({
@@ -245,7 +256,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 												label={__("Slider Line Width", "image-comparison")}
 												value={lineWidth}
 												onChange={(lineWidth) => setAttributes({ lineWidth })}
-												min={1}
+												min={0}
 												max={10}
 											/>
 										</ResetControl>
@@ -253,13 +264,46 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 								</>
 							)}
 							{tab.name === "styles" && (
-								<PanelBody>
-									<ColorControl
-										label={__("Line Color", "image-comparison")}
-										color={lineColor}
-										onChange={(lineColor) => setAttributes({ lineColor })}
-									/>
-								</PanelBody>
+								<>
+									<PanelBody>
+										<ResponsiveDimensionsControl
+											resRequiredProps={resRequiredProps}
+											controlName={WRAPPER_MARGIN}
+											baseLabel={__("Margin", "image-comparison")}
+										/>
+										<ResponsiveDimensionsControl
+											resRequiredProps={resRequiredProps}
+											controlName={WRAPPER_PADDING}
+											baseLabel={__("Padding", "image-comparison")}
+										/>
+										<ColorControl
+											label={__("Line Color", "image-comparison")}
+											color={lineColor}
+											onChange={(lineColor) => setAttributes({ lineColor })}
+										/>
+									</PanelBody>
+									{showLabels && (
+										<PanelBody title={__("Labels", "image-comparison")}>
+											<TypographyDropdown
+												baseLabel={__("Typography", "image-comparison")}
+												typographyPrefixConstant={typoPrefix_label}
+												resRequiredProps={resRequiredProps}
+											/>
+											<ColorControl
+												label={__("Color", "image-comparison")}
+												color={labelColor}
+												onChange={(labelColor) => setAttributes({ labelColor })}
+											/>
+											<ColorControl
+												label={__("Background Color", "image-comparison")}
+												color={labelBackgroundColor}
+												onChange={(labelBackgroundColor) =>
+													setAttributes({ labelBackgroundColor })
+												}
+											/>
+										</PanelBody>
+									)}
+								</>
 							)}
 						</div>
 					)}

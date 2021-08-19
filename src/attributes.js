@@ -1,4 +1,5 @@
-import { IMAGE_WIDTH } from "./constants";
+import { IMAGE_WIDTH, WRAPPER_MARGIN, WRAPPER_PADDING } from "./constants";
+import * as typoPrefixs from "./constants/typographyConstants";
 import {
 	generateTypographyAttributes,
 	generateResponsiveRangeAttributes,
@@ -99,9 +100,29 @@ const attributes = {
 		type: "string",
 		default: "center",
 	},
+	noHandle: {
+		type: "boolean",
+		default: false,
+	},
+	labelColor: {
+		type: "string",
+	},
+	labelBackgroundColor: {
+		type: "string",
+	},
+	// typography attributes
+	...generateTypographyAttributes(Object.values(typoPrefixs)),
 	...generateResponsiveRangeAttributes(IMAGE_WIDTH, {
 		noUnits: true,
 	}),
+	...generateDimensionsAttributes(WRAPPER_MARGIN, {
+		top: 28,
+		right: 0,
+		bottom: 28,
+		left: 0,
+		isLinked: false,
+	}),
+	...generateDimensionsAttributes(WRAPPER_PADDING),
 };
 
 export default attributes;

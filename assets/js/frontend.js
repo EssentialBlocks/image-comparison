@@ -17,6 +17,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		let sliderPosition = wrapper.getAttribute("data-slider-position");
 		let sliderLineWidth = wrapper.getAttribute("data-line-width");
 		let sliderLineColor = wrapper.getAttribute("data-line-color");
+		let noHandle = wrapper.getAttribute("data-handle");
 		render(
 			<ReactCompareImage
 				leftImage={leftImage}
@@ -25,6 +26,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 				{...(hover == "true" ? { hover: "hover" } : {})}
 				{...(showLabels == "true" ? { leftImageLabel: beforeLabel } : {})}
 				{...(showLabels == "true" ? { rightImageLabel: afterLabel } : {})}
+				{...(noHandle == "true" ? { handle: <React.Fragment /> } : {})}
 				sliderPositionPercentage={sliderPosition ? sliderPosition / 100 : 0.5}
 				sliderLineWidth={sliderLineWidth ? sliderLineWidth : 0}
 				sliderLineColor={sliderLineColor ? sliderLineColor : "#ffffff"}
