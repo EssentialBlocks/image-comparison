@@ -19,7 +19,12 @@ import {
 	generateResponsiveRangeStyles,
 } from "../util/helpers";
 
-import { IMAGE_WIDTH, WRAPPER_MARGIN, WRAPPER_PADDING } from "./constants";
+import {
+	IMAGE_WIDTH,
+	WRAPPER_MARGIN,
+	WRAPPER_PADDING,
+	LABEL_PADDING,
+} from "./constants";
 import { typoPrefix_label } from "./constants/typographyConstants";
 
 const edit = (props) => {
@@ -37,10 +42,7 @@ const edit = (props) => {
 		beforeLabel,
 		afterLabel,
 		fullWidth,
-		imageWidth,
-		overlay,
 		position,
-		swap,
 		lineWidth,
 		lineColor,
 		contentPosition,
@@ -92,6 +94,17 @@ const edit = (props) => {
 		prefixConstant: typoPrefix_label,
 	});
 
+	// label padding
+	const {
+		dimensionStylesDesktop: labelPaddingDesktop,
+		dimensionStylesTab: labelPaddingTab,
+		dimensionStylesMobile: labelPaddingMobile,
+	} = generateDimensionsControlStyles({
+		controlName: LABEL_PADDING,
+		styleFor: "padding",
+		attributes,
+	});
+
 	const desktopStyles = `
 		.eb-image-comparison-align-center {
 			margin-right: auto !important;
@@ -111,6 +124,7 @@ const edit = (props) => {
 				? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
+				${labelPaddingDesktop}
 				${labelTypoStylesDesktop}
 				${labelColor ? `color: ${labelColor} !important;` : ""}
 				${
@@ -137,6 +151,7 @@ const edit = (props) => {
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesTab}
+				${labelPaddingDesktop}
 			}
 			`
 				: ""
@@ -156,6 +171,7 @@ const edit = (props) => {
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesMobile}
+				${labelPaddingDesktop}
 			}
 			`
 				: ""

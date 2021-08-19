@@ -1,4 +1,9 @@
-import { IMAGE_WIDTH, WRAPPER_MARGIN, WRAPPER_PADDING } from "./constants";
+import {
+	IMAGE_WIDTH,
+	LABEL_PADDING,
+	WRAPPER_MARGIN,
+	WRAPPER_PADDING,
+} from "./constants";
 import * as typoPrefixs from "./constants/typographyConstants";
 import {
 	generateTypographyAttributes,
@@ -123,6 +128,7 @@ const attributes = {
 		isLinked: false,
 	}),
 	...generateDimensionsAttributes(WRAPPER_PADDING),
+	...generateDimensionsAttributes(LABEL_PADDING),
 };
 
 export default attributes;

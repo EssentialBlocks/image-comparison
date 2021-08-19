@@ -35,6 +35,7 @@ import {
 	IMAGE_WIDTH,
 	WRAPPER_PADDING,
 	WRAPPER_MARGIN,
+	LABEL_PADDING,
 } from "./constants";
 import { typoPrefix_label } from "./constants/typographyConstants";
 
@@ -300,6 +301,11 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 												onChange={(labelBackgroundColor) =>
 													setAttributes({ labelBackgroundColor })
 												}
+											/>
+											<ResponsiveDimensionsControl
+												resRequiredProps={resRequiredProps}
+												controlName={LABEL_PADDING}
+												baseLabel={__("Padding", "image-comparison")}
 											/>
 										</PanelBody>
 									)}
