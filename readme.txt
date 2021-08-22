@@ -81,6 +81,14 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
+= 1.2.0 (dev) =
+* Added: Responsive Controls
+* Added: Margin, Padding Option in Wrapper
+* Added: Content Alignment, Label Alignment
+* Added: Design Customizable Option For Label 
+* Added: Advance and Responsive Typography Option
+* Added: Responsive Preview Edit Option
+
 = 1.0.1 =
 * Fix: Missing css, js files
 
