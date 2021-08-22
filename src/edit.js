@@ -46,6 +46,8 @@ const edit = (props) => {
 		lineWidth,
 		lineColor,
 		contentPosition,
+		horizontalLabelPosition,
+		verticalLabelPosition,
 		noHandle,
 		labelColor,
 		labelBackgroundColor,
@@ -95,7 +97,7 @@ const edit = (props) => {
 	});
 
 	// label padding
-	const {
+	let {
 		dimensionStylesDesktop: labelPaddingDesktop,
 		dimensionStylesTab: labelPaddingTab,
 		dimensionStylesMobile: labelPaddingMobile,
@@ -104,6 +106,14 @@ const edit = (props) => {
 		styleFor: "padding",
 		attributes,
 	});
+
+	labelPaddingDesktop = labelPaddingDesktop.split(";").join(" !important;");
+	labelPaddingTab = labelPaddingTab.split(";").join(" !important;");
+	labelPaddingMobile = labelPaddingMobile.split(";").join(" !important;");
+
+	let labelPostionClass = verticalMode
+		? ` eb-label-vertical-${verticalLabelPosition}`
+		: ` eb-label-horizontal-${horizontalLabelPosition}`;
 
 	const desktopStyles = `
 		.eb-image-comparison-align-center {
@@ -133,6 +143,32 @@ const edit = (props) => {
 						: ""
 				}
 			}
+
+			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-top div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-top div[data-testid="container"] >div:nth-child(5) div {
+				top: 5% !important;
+				transform: none !important;
+			}
+
+			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-bottom div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-bottom div[data-testid="container"] >div:nth-child(5) div {
+				top: unset !important;
+				bottom: 5% !important;
+				transform: none !important;
+			}
+
+			.eb-image-comparison-wrapper.${blockId}.eb-label-vertical-left div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId}.eb-label-vertical-left div[data-testid="container"] >div:nth-child(5) div {
+				left: 5% !important;
+				transform: none !important;
+			}
+
+			.eb-image-comparison-wrapper.${blockId}.eb-label-vertical-right div[data-testid="container"] >div:nth-child(4) div,
+			.eb-image-comparison-wrapper.${blockId}.eb-label-vertical-right div[data-testid="container"] >div:nth-child(5) div {
+				left: unset !important;
+				right: 5% !important;
+				transform: none !important;
+			}
 			`
 				: ""
 		}
@@ -151,7 +187,7 @@ const edit = (props) => {
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesTab}
-				${labelPaddingDesktop}
+				${labelPaddingTab}
 			}
 			`
 				: ""
@@ -171,7 +207,7 @@ const edit = (props) => {
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesMobile}
-				${labelPaddingDesktop}
+				${labelPaddingMobile}
 			}
 			`
 				: ""
@@ -289,7 +325,7 @@ const edit = (props) => {
 				 `}
 			</style>
 			<div
-				className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}`}
+				className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
 			>
 				{hasBothImages ? (
 					<ReactCompareImage

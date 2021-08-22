@@ -7,6 +7,18 @@ export const CONTENT_POSITION = [
 	{ label: __(<Dashicon icon={"editor-alignright"} />), value: "right" },
 ];
 
+export const HORIZONTAL_LABEL_POSITION = [
+	{ label: __("Top"), value: "top" },
+	{ label: __("Center"), value: "center" },
+	{ label: __("Bottom"), value: "bottom" },
+];
+
+export const VERTICAL_LABEL_POSITION = [
+	{ label: __("Left"), value: "left" },
+	{ label: __("Center"), value: "center" },
+	{ label: __("Right"), value: "right" },
+];
+
 export const IMAGE_WIDTH = "imgWidth";
 
 // dimension control

@@ -36,6 +36,8 @@ import {
 	WRAPPER_PADDING,
 	WRAPPER_MARGIN,
 	LABEL_PADDING,
+	HORIZONTAL_LABEL_POSITION,
+	VERTICAL_LABEL_POSITION,
 } from "./constants";
 import { typoPrefix_label } from "./constants/typographyConstants";
 
@@ -55,6 +57,8 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 		lineWidth,
 		lineColor,
 		contentPosition,
+		horizontalLabelPosition,
+		verticalLabelPosition,
 		noHandle,
 		labelColor,
 		labelBackgroundColor,
@@ -142,7 +146,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											)}
 										</>
 										<BaseControl
-											label={__("Alignment", "flipbox")}
+											label={__("Alignment", "image-comparison")}
 											id="eb-button-group-alignment"
 										>
 											<ButtonGroup id="eb-button-group-alignment">
@@ -215,6 +219,58 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 														setAttributes({ afterLabel })
 													}
 												/>
+												{verticalMode && (
+													<BaseControl
+														label={__("Label Position", "image-comparison")}
+													>
+														<ButtonGroup>
+															{VERTICAL_LABEL_POSITION.map((item) => (
+																<Button
+																	isLarge
+																	isPrimary={
+																		verticalLabelPosition === item.value
+																	}
+																	isSecondary={
+																		verticalLabelPosition !== item.value
+																	}
+																	onClick={() =>
+																		setAttributes({
+																			verticalLabelPosition: item.value,
+																		})
+																	}
+																>
+																	{item.label}
+																</Button>
+															))}
+														</ButtonGroup>
+													</BaseControl>
+												)}
+												{!verticalMode && (
+													<BaseControl
+														label={__("Label Position", "image-comparison")}
+													>
+														<ButtonGroup>
+															{HORIZONTAL_LABEL_POSITION.map((item) => (
+																<Button
+																	isLarge
+																	isPrimary={
+																		horizontalLabelPosition === item.value
+																	}
+																	isSecondary={
+																		horizontalLabelPosition !== item.value
+																	}
+																	onClick={() =>
+																		setAttributes({
+																			horizontalLabelPosition: item.value,
+																		})
+																	}
+																>
+																	{item.label}
+																</Button>
+															))}
+														</ButtonGroup>
+													</BaseControl>
+												)}
 											</>
 										)}
 										<ToggleControl

@@ -105,6 +105,14 @@ const attributes = {
 		type: "string",
 		default: "center",
 	},
+	horizontalLabelPosition: {
+		type: "string",
+		default: "center",
+	},
+	verticalLabelPosition: {
+		type: "string",
+		default: "center",
+	},
 	noHandle: {
 		type: "boolean",
 		default: false,

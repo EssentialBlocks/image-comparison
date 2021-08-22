@@ -22,7 +22,6 @@
  */
 define('IMAGE_COMPARISON_DIR', dirname(__FILE__));
 
-// require_once __DIR__ . '/includes/admin-enqueue.php';
 require_once __DIR__ . '/lib/style-handler/style-handler.php';
 
 function create_block_image_comparison_block_init()
