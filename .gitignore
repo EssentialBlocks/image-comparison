@@ -25,3 +25,7 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# MAC device files
+.DS_Store
+package-lock.json

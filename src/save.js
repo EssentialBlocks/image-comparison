@@ -1,53 +1,53 @@
+const { useBlockProps } = wp.blockEditor;
+
 const Save = ({ attributes }) => {
 	const {
-		id,
+		blockId,
 		leftImageURL,
 		rightImageURL,
 		hover,
-		fullWidth,
-		imageWidth,
-		position,
-		overlay,
+		verticalMode,
+		showLabels,
 		beforeLabel,
 		afterLabel,
+		position,
+		lineWidth,
 		lineColor,
-		lineWidth = lineWidth || 3,
-		arrowColor,
+		contentPosition,
+		horizontalLabelPosition,
+		verticalLabelPosition,
+		noHandle,
 	} = attributes;
 
-	const defaultLineColor = "#ffffff";
-	const defaultArrowColor = "#ffffff";
-
-	const wrapperStyles = {
-		width: fullWidth ? undefined : imageWidth,
-	};
+	const alignmentClass =
+		contentPosition === "center"
+			? " eb-image-comparison-align-center"
+			: contentPosition === "right"
+			? " eb-image-comparison-align-right"
+			: "";
+	let labelPostionClass = verticalMode
+		? ` eb-label-vertical-${verticalLabelPosition}`
+		: ` eb-label-horizontal-${horizontalLabelPosition}`;
 
 	return (
-		<div
-			className="eb-image-comparison-wrapper"
-			data-id={`eb-ic-${id}`}
-			data-overlay={overlay ? "true" : "false"}
-			data-hover={hover ? "true" : "false"}
-			data-position={position}
-			data-before-label={beforeLabel}
-			data-after-label={afterLabel}
-			data-line-width={lineWidth}
-			data-line-color={lineColor || defaultLineColor}
-			data-arrow-color={arrowColor || defaultArrowColor}
-			style={wrapperStyles}
-		>
-			<img
-				className="eb-image-comparison-image eb-image-comparison-left"
-				alt="Left Image"
-				src={leftImageURL}
-			/>
-			<img
-				className="eb-image-comparison-image eb-image-comparison-right"
-				alt="Right Image"
-				src={rightImageURL}
-			/>
-		</div>
+		<>
+			<div {...useBlockProps.save()}>
+				<div
+					className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
+					data-left-image={leftImageURL}
+					data-right-image={rightImageURL}
+					data-vertical-mode={verticalMode}
+					data-hover={hover}
+					data-show-label={showLabels}
+					data-left-label={beforeLabel}
+					data-right-label={afterLabel}
+					data-slider-position={position}
+					data-line-width={lineWidth}
+					data-line-color={lineColor}
+					data-handle={noHandle}
+				></div>
+			</div>
+		</>
 	);
 };
-
 export default Save;
