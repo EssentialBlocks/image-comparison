@@ -85,7 +85,7 @@ Yes, it will work with any standard WordPress theme.
 * Added: Responsive controls
 * Added: Margin, padding option in wrapper
 * Added: Content alignment, label alignment
-* Added: Design customizable option for label
+* Added: Design customisable option for label
 * Added: Advance and responsive typography option
 * Added: Responsive preview edit option
 
@@ -96,3 +96,5 @@ Yes, it will work with any standard WordPress theme.
 * Initial Release
 
 == Upgrade Notice ==
+
+[Major update] New controls, design and performance improvement
