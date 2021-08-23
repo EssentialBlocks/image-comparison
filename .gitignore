@@ -28,3 +28,4 @@ node_modules/
 
 # MAC device files
 .DS_Store
+package-lock.json

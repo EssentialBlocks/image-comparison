@@ -1,9 +1,9 @@
 === Image Comparison ===
-Contributors: wpdevteam, re_enter_rupok, Asif2BD, alam789
+Contributors: wpdevteam, re_enter_rupok, Asif2BD, fencermonir, rahat89
 Tags: block, blocks, image, compare, comparison, image compare, image comparison, before after, gutenberg, gutenberg blocks
-Requires at least: 5.0
-Tested up to: 5.5
-Stable tag: 1.0.1
+Requires at least: 5.5
+Tested up to: 5.8
+Stable tag: 1.2.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ Use **Image Comparison** plugin & let your visitors compare images to make your 
 **Dedicated Support:** We’ve an extraordinary support team ready to help you. Ask your questions in the support forum, we’ll get back to you immediately.
 
 
-## 🚀 BACKED BY A TRUSTED TEAM ## 
+## 🚀 BACKED BY A TRUSTED TEAM ##
 
 This Block is brought to you by [WPDeveloper](https://wpdeveloper.net), the team behind the most popular elements library [Essential Addons for Elementor](https://wordpress.org/plugins/essential-addons-for-elementor-lite/) (used by almost 700,000 happy users from 180+ countries).
 
@@ -61,7 +61,7 @@ Consider checking out our other WordPress solutions & boost your WordPress websi
 
 = Modern Way: =
 1. Go to the WordPress Block/Gutenberg Editor
-2. Search For "Image Comparison". 
+2. Search For "Image Comparison".
 3. Install in 1-click
 
 = Old Way: =
@@ -81,13 +81,13 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
-= 1.2.0 (dev) =
-* Added: Responsive Controls
-* Added: Margin, Padding Option in Wrapper
-* Added: Content Alignment, Label Alignment
-* Added: Design Customizable Optiona For Label 
-* Added: Advance and Responsive Typography Option
-* Added: Responsive Preview Edit Option
+= 1.2.0 23/08/2021 =
+* Added: Responsive controls
+* Added: Margin, padding option in wrapper
+* Added: Content alignment, label alignment
+* Added: Design customizable option for label
+* Added: Advance and responsive typography option
+* Added: Responsive preview edit option
 
 = 1.0.1 =
 * Fix: Missing css, js files
