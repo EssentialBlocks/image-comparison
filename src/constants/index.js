@@ -1,5 +1,5 @@
-const { __ } = wp.i18n;
-const { Dashicon } = wp.components;
+import { __ } from "@wordpress/i18n";
+import { Dashicon } from "@wordpress/components";
 
 export const CONTENT_POSITION = [
 	{ label: __(<Dashicon icon={"editor-alignleft"} />), value: "left" },
@@ -8,15 +8,15 @@ export const CONTENT_POSITION = [
 ];
 
 export const HORIZONTAL_LABEL_POSITION = [
-	{ label: __("Top"), value: "top" },
-	{ label: __("Center"), value: "center" },
-	{ label: __("Bottom"), value: "bottom" },
+	{ label: __("Top", "image-comparison"), value: "top" },
+	{ label: __("Center", "image-comparison"), value: "center" },
+	{ label: __("Bottom", "image-comparison"), value: "bottom" },
 ];
 
 export const VERTICAL_LABEL_POSITION = [
-	{ label: __("Left"), value: "left" },
-	{ label: __("Center"), value: "center" },
-	{ label: __("Right"), value: "right" },
+	{ label: __("Left", "image-comparison"), value: "left" },
+	{ label: __("Center", "image-comparison"), value: "center" },
+	{ label: __("Right", "image-comparison"), value: "right" },
 ];
 
 export const IMAGE_WIDTH = "imgWidth";

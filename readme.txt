@@ -81,6 +81,12 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
+= dev =
+
+* Fixed: Block Base theme support
+* Improved: Font Library Updated
+* Improved: Controls and structure
+
 = 1.2.0 23/08/2021 =
 * Added: Responsive controls
 * Added: Margin, padding option in wrapper

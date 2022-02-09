@@ -1,9 +1,10 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-const { InspectorControls } = wp.blockEditor;
-const {
+import { __ } from "@wordpress/i18n";
+import { useEffect } from "@wordpress/element";
+import { InspectorControls } from "@wordpress/block-editor";
+import {
 	PanelBody,
 	BaseControl,
 	ToggleControl,
@@ -12,24 +13,43 @@ const {
 	TabPanel,
 	ButtonGroup,
 	Button,
-} = wp.components;
-const { useEffect } = wp.element;
-const { select } = wp.data;
+} from "@wordpress/components";
+import { select } from "@wordpress/data";
 
 /**
  * Internal dependencies
  */
-import {
-	mimmikCssForResBtns,
-	mimmikCssOnPreviewBtnClickWhileBlockSelected,
-} from "../util/helpers";
 import objAttributes from "./attributes";
-import ImageAvatar from "../util/image-avatar";
-import ResetControl from "../util/reset-control";
-import ColorControl from "../util/color-control";
-import ResponsiveRangeController from "../util/responsive-range-control";
-import ResponsiveDimensionsControl from "../util/dimensions-control-v2";
-import TypographyDropdown from "../util/typography-control-v2";
+
+// import {
+// 	mimmikCssForResBtns,
+// 	mimmikCssOnPreviewBtnClickWhileBlockSelected,
+// } from "../../../util/helpers";
+// import ImageAvatar from "../../../util/image-avatar";
+// import ResetControl from "../../../util/reset-control";
+// import ColorControl from "../../../util/color-control";
+// import ResponsiveRangeController from "../../../util/responsive-range-control";
+// import ResponsiveDimensionsControl from "../../../util/dimensions-control-v2";
+// import TypographyDropdown from "../../../util/typography-control-v2";
+
+const {
+	// mimmikCssForResBtns,
+	// mimmikCssOnPreviewBtnClickWhileBlockSelected,
+
+	//
+	ImageAvatar,
+	ResetControl,
+	ColorControl,
+	ResponsiveRangeController,
+	ResponsiveDimensionsControl,
+	TypographyDropdown,
+} = window.EBImageComparisonControls;
+
+const editorStoreForGettingPreivew =
+	eb_style_handler.editor_type === "edit-site"
+		? "core/edit-site"
+		: "core/edit-post";
+
 import {
 	CONTENT_POSITION,
 	IMAGE_WIDTH,
@@ -67,29 +87,31 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class only the first time once
 	useEffect(() => {
 		setAttributes({
-			resOption: select("core/edit-post").__experimentalGetPreviewDeviceType(),
+			resOption: select(
+				editorStoreForGettingPreivew
+			).__experimentalGetPreviewDeviceType(),
 		});
 	}, []);
 
-	// this useEffect is for mimmiking css for all the eb blocks on resOption changing
-	useEffect(() => {
-		mimmikCssForResBtns({
-			domObj: document,
-			resOption,
-		});
-	}, [resOption]);
+	// // this useEffect is for mimmiking css for all the eb blocks on resOption changing
+	// useEffect(() => {
+	// 	mimmikCssForResBtns({
+	// 		domObj: document,
+	// 		resOption,
+	// 	});
+	// }, [resOption]);
 
-	// this useEffect is to mimmik css for responsive preview in the editor page when clicking the buttons in the 'Preview button of wordpress' located beside the 'update' button while any block is selected and it's inspector panel is mounted in the DOM
-	useEffect(() => {
-		const cleanUp = mimmikCssOnPreviewBtnClickWhileBlockSelected({
-			domObj: document,
-			select,
-			setAttributes,
-		});
-		return () => {
-			cleanUp();
-		};
-	}, []);
+	// // this useEffect is to mimmik css for responsive preview in the editor page when clicking the buttons in the 'Preview button of wordpress' located beside the 'update' button while any block is selected and it's inspector panel is mounted in the DOM
+	// useEffect(() => {
+	// 	const cleanUp = mimmikCssOnPreviewBtnClickWhileBlockSelected({
+	// 		domObj: document,
+	// 		select,
+	// 		setAttributes,
+	// 	});
+	// 	return () => {
+	// 		cleanUp();
+	// 	};
+	// }, []);
 
 	const resRequiredProps = {
 		setAttributes,
@@ -107,12 +129,12 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 					tabs={[
 						{
 							name: "general",
-							title: "General",
+							title: __("General", "image-comparison"),
 							className: "eb-tab general",
 						},
 						{
 							name: "styles",
-							title: "Styles",
+							title: __("Style", "image-comparison"),
 							className: "eb-tab styles",
 						},
 					]}
@@ -121,10 +143,15 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 						<div className={"eb-tab-controls " + tab.name}>
 							{tab.name === "general" && (
 								<>
-									<PanelBody title={__("General Settings")} initialOpen={true}>
+									<PanelBody
+										title={__("General Settings", "image-comparison")}
+										initialOpen={true}
+									>
 										<>
 											{leftImageURL && (
-												<BaseControl label={__("Left Image")}>
+												<BaseControl
+													label={__("Left Image", "image-comparison")}
+												>
 													<ImageAvatar
 														imageUrl={leftImageURL}
 														onDeleteImage={() =>
@@ -135,7 +162,9 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											)}
 
 											{rightImageURL && (
-												<BaseControl label={__("Right Image")}>
+												<BaseControl
+													label={__("Right Image", "image-comparison")}
+												>
 													<ImageAvatar
 														imageUrl={rightImageURL}
 														onDeleteImage={() =>
@@ -152,7 +181,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											<ButtonGroup id="eb-button-group-alignment">
 												{CONTENT_POSITION.map((item) => (
 													<Button
-														isLarge
+														// isLarge
 														isPrimary={contentPosition === item.value}
 														isSecondary={contentPosition !== item.value}
 														onClick={() =>
@@ -174,7 +203,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 										{!fullWidth && (
 											<>
 												<ResponsiveRangeController
-													baseLabel={__("Image Width", "image-comparion")}
+													baseLabel={__("Image Width", "image-comparison")}
 													controlName={IMAGE_WIDTH}
 													resRequiredProps={resRequiredProps}
 													min={0}
@@ -226,7 +255,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 														<ButtonGroup>
 															{VERTICAL_LABEL_POSITION.map((item) => (
 																<Button
-																	isLarge
+																	// isLarge
 																	isPrimary={
 																		verticalLabelPosition === item.value
 																	}
@@ -252,7 +281,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 														<ButtonGroup>
 															{HORIZONTAL_LABEL_POSITION.map((item) => (
 																<Button
-																	isLarge
+																	// isLarge
 																	isPrimary={
 																		horizontalLabelPosition === item.value
 																	}
@@ -274,7 +303,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											</>
 										)}
 										<ToggleControl
-											label={__("Swap Images")}
+											label={__("Swap Images", "image-comparison")}
 											checked={swap}
 											onChange={() => onImageSwap()}
 										/>
@@ -327,6 +356,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											resRequiredProps={resRequiredProps}
 											controlName={WRAPPER_MARGIN}
 											baseLabel={__("Margin", "image-comparison")}
+											disableLeftRight={true}
 										/>
 										<ResponsiveDimensionsControl
 											resRequiredProps={resRequiredProps}
