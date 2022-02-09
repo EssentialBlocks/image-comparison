@@ -3,7 +3,7 @@ const { __ } = wp.i18n;
 
 import "./style.scss";
 import Edit from "./edit";
-import save from "./Save";
+import Save from "./save";
 import icon from "./icon";
 import attributes from "./attributes";
 
@@ -18,5 +18,5 @@ registerBlockType("image-comparison/image-comparison", {
 	attributes,
 	icon,
 	edit: Edit,
-	save,
+	save: Save,
 });
