@@ -5,11 +5,19 @@ import {
 	WRAPPER_PADDING,
 } from "./constants";
 import * as typoPrefixs from "./constants/typographyConstants";
-import {
+
+// import {
+// 	generateTypographyAttributes,
+// 	generateResponsiveRangeAttributes,
+// 	generateDimensionsAttributes,
+// } from "../../../util/helpers";
+
+const {
 	generateTypographyAttributes,
 	generateResponsiveRangeAttributes,
 	generateDimensionsAttributes,
-} from "../util/helpers";
+} = window.EBImageComparisonControls;
+
 const attributes = {
 	// the following 4 attributes is must required for responsive options and asset generation for frontend
 	// responsive control attributes ⬇
@@ -134,6 +142,7 @@ const attributes = {
 		bottom: 28,
 		left: 0,
 		isLinked: false,
+		disableLeftRight: true,
 	}),
 	...generateDimensionsAttributes(WRAPPER_PADDING),
 	...generateDimensionsAttributes(LABEL_PADDING),

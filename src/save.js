@@ -1,4 +1,4 @@
-const { useBlockProps } = wp.blockEditor;
+import { useBlockProps } from "@wordpress/block-editor";
 
 const Save = ({ attributes }) => {
 	const {
@@ -45,7 +45,24 @@ const Save = ({ attributes }) => {
 					data-line-width={lineWidth}
 					data-line-color={lineColor}
 					data-handle={noHandle}
-				></div>
+				>
+					{leftImageURL && rightImageURL && (
+						<>
+							<div data-testid="container">
+								<img
+									alt="Left Image"
+									src={leftImageURL}
+									data-testid="left-image"
+								/>
+								<img
+									alt="Right Image"
+									src={rightImageURL}
+									data-testid="right-image"
+								/>
+							</div>
+						</>
+					)}
+				</div>
 			</div>
 		</>
 	);

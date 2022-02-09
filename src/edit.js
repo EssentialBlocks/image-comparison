@@ -1,23 +1,46 @@
-const { useBlockProps, MediaUpload } = wp.blockEditor;
-const { select } = wp.data;
-const { Button } = wp.components;
-const { __ } = wp.i18n;
-const { useEffect } = wp.element;
+/**
+ * WordPress Dependencies
+ */
+import { __ } from "@wordpress/i18n";
+import { useEffect, useRef } from "@wordpress/element";
+import { useBlockProps, MediaUpload } from "@wordpress/block-editor";
+import { Button } from "@wordpress/components";
+import { select, dispatch } from "@wordpress/data";
+
+/**
+ * External depencencies
+ */
+
 /**
  * Internal Import
  */
-import "./editor.scss";
 import ReactCompareImage from "react-compare-image";
+import classnames from "classnames";
+
 import Inspector from "./inspector";
-import {
+
+// import {
+// 	softMinifyCssStrings,
+// 	mimmikCssForPreviewBtnClick,
+// 	duplicateBlockIdFix,
+// 	generateDimensionsControlStyles,
+// 	generateTypographyStyles,
+// 	generateResponsiveRangeStyles,
+// } from "../../../util/helpers";
+
+const {
 	softMinifyCssStrings,
-	isCssExists,
-	mimmikCssForPreviewBtnClick,
+	// mimmikCssForPreviewBtnClick,
 	duplicateBlockIdFix,
 	generateDimensionsControlStyles,
 	generateTypographyStyles,
 	generateResponsiveRangeStyles,
-} from "../util/helpers";
+} = window.EBImageComparisonControls;
+
+const editorStoreForGettingPreivew =
+	eb_style_handler.editor_type === "edit-site"
+		? "core/edit-site"
+		: "core/edit-post";
 
 import {
 	IMAGE_WIDTH,
@@ -28,7 +51,7 @@ import {
 import { typoPrefix_label } from "./constants/typographyConstants";
 
 const edit = (props) => {
-	const { attributes, setAttributes, clientId, isSelected } = props;
+	const { attributes, setAttributes, className, clientId, isSelected } = props;
 	const {
 		blockId,
 		blockMeta,
@@ -53,6 +76,8 @@ const edit = (props) => {
 		labelBackgroundColor,
 	} = attributes;
 
+	const hiddenImg = useRef(null);
+
 	const {
 		rangeStylesDesktop: imageWidthDesktop,
 		rangeStylesTab: imageWidthTab,
@@ -72,6 +97,7 @@ const edit = (props) => {
 	} = generateDimensionsControlStyles({
 		controlName: WRAPPER_MARGIN,
 		styleFor: "margin",
+		disableLeftRight: true,
 		attributes,
 	});
 
@@ -217,7 +243,9 @@ const edit = (props) => {
 	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
 	useEffect(() => {
 		setAttributes({
-			resOption: select("core/edit-post").__experimentalGetPreviewDeviceType(),
+			resOption: select(
+				editorStoreForGettingPreivew
+			).__experimentalGetPreviewDeviceType(),
 		});
 	}, []);
 
@@ -233,31 +261,31 @@ const edit = (props) => {
 		});
 	}, []);
 
-	// this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
-	useEffect(() => {
-		mimmikCssForPreviewBtnClick({
-			domObj: document,
-			select,
-		});
-	}, []);
+	// // this useEffect is for mimmiking css when responsive options clicked from wordpress's 'preview' button
+	// useEffect(() => {
+	// 	mimmikCssForPreviewBtnClick({
+	// 		domObj: document,
+	// 		select,
+	// 	});
+	// }, []);
 
 	const blockProps = useBlockProps({
-		className: `eb-guten-block-main-parent-wrapper`,
+		className: classnames(className, `eb-guten-block-main-parent-wrapper`),
 	});
 
 	// all css styles for large screen width (desktop/laptop) in strings ⬇
 	const desktopAllStyles = softMinifyCssStrings(`
-		${isCssExists(desktopStyles) ? desktopStyles : " "}
+		${desktopStyles}
 	`);
 
 	// all css styles for Tab in strings ⬇
 	const tabAllStyles = softMinifyCssStrings(`
-		${isCssExists(tabStyles) ? tabStyles : " "}
+		${tabStyles}
 	`);
 
 	// all css styles for Mobile in strings ⬇
 	const mobileAllStyles = softMinifyCssStrings(`
-		${isCssExists(mobileStyles) ? mobileStyles : " "}
+		${mobileStyles}
 	`);
 	// Set All Style in "blockMeta" Attribute
 	useEffect(() => {
@@ -286,106 +314,121 @@ const edit = (props) => {
 		setAttributes({ swap, leftImageURL, rightImageURL });
 	};
 
-	return [
-		isSelected && (
-			<Inspector
-				key="inspector"
-				attributes={attributes}
-				setAttributes={setAttributes}
-				onImageSwap={onImageSwap}
-			/>
-		),
-		<div {...blockProps}>
-			<style>
-				{`
-				 ${desktopAllStyles}
- 
-				 /* mimmikcssStart */
- 
-				 ${resOption === "Tablet" ? tabAllStyles : " "}
-				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
- 
-				 /* mimmikcssEnd */
- 
-				 @media all and (max-width: 1024px) {	
- 
-					 /* tabcssStart */			
-					 ${softMinifyCssStrings(tabAllStyles)}
-					 /* tabcssEnd */			
+	if (hiddenImg.current) {
+		hiddenImg.current.addEventListener("click", function () {
+			dispatch("core/block-editor").selectBlock(clientId);
+			dispatch("core/edit-post").openGeneralSidebar("edit-post/block");
+		});
+	}
+
+	return (
+		<>
+			{isSelected && (
+				<Inspector
+					key="inspector"
+					attributes={attributes}
+					setAttributes={setAttributes}
+					onImageSwap={onImageSwap}
+				/>
+			)}
+			<div {...blockProps}>
+				<style>
+					{`
+			 ${desktopAllStyles}
+
+			 /* mimmikcssStart */
+
+			 ${resOption === "Tablet" ? tabAllStyles : " "}
+			 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
+
+			 /* mimmikcssEnd */
+
+			 @media all and (max-width: 1024px) {	
+
+				 /* tabcssStart */			
+				 ${softMinifyCssStrings(tabAllStyles)}
+				 /* tabcssEnd */			
+			 
+			 }
+			 
+			 @media all and (max-width: 767px) {
 				 
-				 }
-				 
-				 @media all and (max-width: 767px) {
-					 
-					 /* mobcssStart */			
-					 ${softMinifyCssStrings(mobileAllStyles)}
-					 /* mobcssEnd */			
-				 
-				 }
-				 `}
-			</style>
-			<div
-				className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
-			>
-				{hasBothImages ? (
-					<ReactCompareImage
-						leftImage={leftImageURL}
-						rightImage={rightImageURL}
-						{...(verticalMode ? { vertical: "vertical" } : {})}
-						{...(hover ? { hover: "hover" } : {})}
-						{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
-						{...(showLabels ? { rightImageLabel: afterLabel } : {})}
-						{...(noHandle ? { handle: <React.Fragment /> } : {})}
-						sliderPositionPercentage={position / 100}
-						sliderLineWidth={lineWidth ? lineWidth : 0}
-						sliderLineColor={lineColor}
-					/>
-				) : (
-					<div className="eb-image-comparison-placeholder">
-						<MediaUpload
-							onSelect={(media) => setAttributes({ leftImageURL: media.url })}
-							type="image"
-							value={leftImageURL}
-							render={({ open }) =>
-								!leftImageURL ? (
-									<Button
-										className="eb-image-comparison-upload components-button"
-										label={__("Upload Left Image")}
-										icon="format-image"
-										onClick={open}
-									/>
-								) : (
-									<img
-										className="eb-image-comparison-image"
-										src={leftImageURL}
-									/>
-								)
-							}
-						/>
-						<MediaUpload
-							onSelect={(media) => setAttributes({ rightImageURL: media.url })}
-							type="image"
-							value={rightImageURL}
-							render={({ open }) =>
-								!rightImageURL ? (
-									<Button
-										className="eb-image-comparison-upload components-button"
-										label={__("Upload Right Image")}
-										icon="format-image"
-										onClick={open}
-									/>
-								) : (
-									<img
-										className="eb-image-comparison-image"
-										src={rightImageURL}
-									/>
-								)
-							}
-						/>
-					</div>
-				)}
+				 /* mobcssStart */			
+				 ${softMinifyCssStrings(mobileAllStyles)}
+				 /* mobcssEnd */			
+			 
+			 }
+			 `}
+				</style>
+				<div
+					className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
+				>
+					{hasBothImages ? (
+						<>
+							<div className="eb-image-comparison-hide" ref={hiddenImg}>
+								<ReactCompareImage
+									leftImage={leftImageURL}
+									rightImage={rightImageURL}
+									{...(verticalMode ? { vertical: "vertical" } : {})}
+									{...(hover ? { hover: "hover" } : {})}
+									{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
+									{...(showLabels ? { rightImageLabel: afterLabel } : {})}
+									{...(noHandle ? { handle: <React.Fragment /> } : {})}
+									sliderPositionPercentage={position / 100}
+									sliderLineWidth={lineWidth ? lineWidth : 0}
+									sliderLineColor={lineColor}
+								/>
+							</div>
+						</>
+					) : (
+						<div className="eb-image-comparison-placeholder">
+							<MediaUpload
+								onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+								type="image"
+								value={leftImageURL}
+								render={({ open }) =>
+									!leftImageURL ? (
+										<Button
+											className="eb-image-comparison-upload components-button"
+											label={__("Upload Left Image", "image-comparison")}
+											icon="format-image"
+											onClick={open}
+										/>
+									) : (
+										<img
+											className="eb-image-comparison-image"
+											src={leftImageURL}
+										/>
+									)
+								}
+							/>
+							<MediaUpload
+								onSelect={(media) =>
+									setAttributes({ rightImageURL: media.url })
+								}
+								type="image"
+								value={rightImageURL}
+								render={({ open }) =>
+									!rightImageURL ? (
+										<Button
+											className="eb-image-comparison-upload components-button"
+											label={__("Upload Right Image", "image-comparison")}
+											icon="format-image"
+											onClick={open}
+										/>
+									) : (
+										<img
+											className="eb-image-comparison-image"
+											src={rightImageURL}
+										/>
+									)
+								}
+							/>
+						</div>
+					)}
+				</div>
 			</div>
-		</div>,
-	];
+		</>
+	);
 };
 export default edit;

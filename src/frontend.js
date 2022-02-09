@@ -1,4 +1,4 @@
-const { render } = wp.element;
+import { render } from "@wordpress/element";
 import ReactCompareImage from "react-compare-image";
 
 window.addEventListener("DOMContentLoaded", (event) => {

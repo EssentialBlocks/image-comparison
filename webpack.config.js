@@ -1,19 +1,36 @@
 const path = require("path");
 const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = {
+const plugins = defaultConfig.plugins.filter(
+	(plugin) =>
+		plugin.constructor.name != "MiniCssExtractPlugin" &&
+		plugin.constructor.name != "CleanWebpackPlugin"
+);
+
+let allEntries = {
+	dist: "./src/index.js",
+	"lib/style-handler/dist": "./lib/style-handler/style-handler.js",
+	"dist/frontend": "./src/frontend.js",
+};
+
+const config = {
 	...defaultConfig,
-	entry: {
-		index: path.resolve(__dirname, "src/index.js"),
-		frontend: path.resolve(__dirname, "assets/js/frontend.js"),
-	},
+	entry: allEntries,
 	output: {
-		...defaultConfig.output,
-		filename: "[name].js",
-		path: path.resolve(__dirname, "build"),
+		path: path.resolve(__dirname),
+		filename: "[name]/index.js",
 	},
+	plugins: [
+		...plugins,
+		new MiniCSSExtractPlugin({
+			filename: "dist/style.css",
+		}),
+	],
 	externals: {
 		react: "React",
 		"react-dom": "ReactDOM",
 	},
 };
+
+module.exports = config;
