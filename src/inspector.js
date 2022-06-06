@@ -21,32 +21,18 @@ import { select } from "@wordpress/data";
  */
 import objAttributes from "./attributes";
 
-// import {
-// 	mimmikCssForResBtns,
-// 	mimmikCssOnPreviewBtnClickWhileBlockSelected,
-// } from "../../../util/helpers";
-// import ImageAvatar from "../../../util/image-avatar";
-// import ResetControl from "../../../util/reset-control";
-// import ColorControl from "../../../util/color-control";
-// import ResponsiveRangeController from "../../../util/responsive-range-control";
-// import ResponsiveDimensionsControl from "../../../util/dimensions-control-v2";
-// import TypographyDropdown from "../../../util/typography-control-v2";
-
 const {
-	// mimmikCssForResBtns,
-	// mimmikCssOnPreviewBtnClickWhileBlockSelected,
-
-	//
 	ImageAvatar,
 	ResetControl,
 	ColorControl,
 	ResponsiveRangeController,
 	ResponsiveDimensionsControl,
 	TypographyDropdown,
+	AdvancedControls,
 } = window.EBImageComparisonControls;
 
 const editorStoreForGettingPreivew =
-	eb_style_handler.editor_type === "edit-site"
+	eb_conditional_localize.editor_type === "edit-site"
 		? "core/edit-site"
 		: "core/edit-post";
 
@@ -93,26 +79,6 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 		});
 	}, []);
 
-	// // this useEffect is for mimmiking css for all the eb blocks on resOption changing
-	// useEffect(() => {
-	// 	mimmikCssForResBtns({
-	// 		domObj: document,
-	// 		resOption,
-	// 	});
-	// }, [resOption]);
-
-	// // this useEffect is to mimmik css for responsive preview in the editor page when clicking the buttons in the 'Preview button of wordpress' located beside the 'update' button while any block is selected and it's inspector panel is mounted in the DOM
-	// useEffect(() => {
-	// 	const cleanUp = mimmikCssOnPreviewBtnClickWhileBlockSelected({
-	// 		domObj: document,
-	// 		select,
-	// 		setAttributes,
-	// 	});
-	// 	return () => {
-	// 		cleanUp();
-	// 	};
-	// }, []);
-
 	const resRequiredProps = {
 		setAttributes,
 		resOption,
@@ -129,13 +95,18 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 					tabs={[
 						{
 							name: "general",
-							title: __("General", "image-comparison"),
+							title: __("General", "essential-blocks"),
 							className: "eb-tab general",
 						},
 						{
 							name: "styles",
-							title: __("Style", "image-comparison"),
+							title: __("Style", "essential-blocks"),
 							className: "eb-tab styles",
+						},
+						{
+							name: 'advance',
+							title: __("Advanced", "essential-blocks"),
+							className: 'eb-tab advance',
 						},
 					]}
 				>
@@ -144,13 +115,13 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 							{tab.name === "general" && (
 								<>
 									<PanelBody
-										title={__("General Settings", "image-comparison")}
+										title={__("General Settings", "essential-blocks")}
 										initialOpen={true}
 									>
 										<>
 											{leftImageURL && (
 												<BaseControl
-													label={__("Left Image", "image-comparison")}
+													label={__("Left Image", "essential-blocks")}
 												>
 													<ImageAvatar
 														imageUrl={leftImageURL}
@@ -163,7 +134,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 
 											{rightImageURL && (
 												<BaseControl
-													label={__("Right Image", "image-comparison")}
+													label={__("Right Image", "essential-blocks")}
 												>
 													<ImageAvatar
 														imageUrl={rightImageURL}
@@ -175,13 +146,13 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											)}
 										</>
 										<BaseControl
-											label={__("Alignment", "image-comparison")}
+											label={__("Alignment", "essential-blocks")}
 											id="eb-button-group-alignment"
 										>
 											<ButtonGroup id="eb-button-group-alignment">
-												{CONTENT_POSITION.map((item) => (
+												{CONTENT_POSITION.map((item, index) => (
 													<Button
-														// isLarge
+														key={index}
 														isPrimary={contentPosition === item.value}
 														isSecondary={contentPosition !== item.value}
 														onClick={() =>
@@ -196,14 +167,14 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											</ButtonGroup>
 										</BaseControl>
 										<ToggleControl
-											label={__("Full Width", "image-comparison")}
+											label={__("Full Width", "essential-blocks")}
 											checked={fullWidth}
 											onChange={() => setAttributes({ fullWidth: !fullWidth })}
 										/>
 										{!fullWidth && (
 											<>
 												<ResponsiveRangeController
-													baseLabel={__("Image Width", "image-comparison")}
+													baseLabel={__("Image Width", "essential-blocks")}
 													controlName={IMAGE_WIDTH}
 													resRequiredProps={resRequiredProps}
 													min={0}
@@ -214,19 +185,19 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											</>
 										)}
 										<ToggleControl
-											label={__("Move on Hover", "image-comparison")}
+											label={__("Move on Hover", "essential-blocks")}
 											checked={hover}
 											onChange={() => setAttributes({ hover: !hover })}
 										/>
 										<ToggleControl
-											label={__("Vertical Mode", "image-comparison")}
+											label={__("Vertical Mode", "essential-blocks")}
 											checked={verticalMode}
 											onChange={() =>
 												setAttributes({ verticalMode: !verticalMode })
 											}
 										/>
 										<ToggleControl
-											label={__("Show Labels", "image-comparison")}
+											label={__("Show Labels", "essential-blocks")}
 											checked={showLabels}
 											onChange={() =>
 												setAttributes({ showLabels: !showLabels })
@@ -235,14 +206,14 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 										{showLabels && (
 											<>
 												<TextControl
-													label={__("Before Label", "image-comparison")}
+													label={__("Before Label", "essential-blocks")}
 													value={beforeLabel}
 													onChange={(beforeLabel) =>
 														setAttributes({ beforeLabel })
 													}
 												/>
 												<TextControl
-													label={__("After Label", "image-comparison")}
+													label={__("After Label", "essential-blocks")}
 													value={afterLabel}
 													onChange={(afterLabel) =>
 														setAttributes({ afterLabel })
@@ -250,12 +221,12 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 												/>
 												{verticalMode && (
 													<BaseControl
-														label={__("Label Position", "image-comparison")}
+														label={__("Label Position", "essential-blocks")}
 													>
 														<ButtonGroup>
-															{VERTICAL_LABEL_POSITION.map((item) => (
+															{VERTICAL_LABEL_POSITION.map((item, index) => (
 																<Button
-																	// isLarge
+																	key={index}
 																	isPrimary={
 																		verticalLabelPosition === item.value
 																	}
@@ -276,12 +247,12 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 												)}
 												{!verticalMode && (
 													<BaseControl
-														label={__("Label Position", "image-comparison")}
+														label={__("Label Position", "essential-blocks")}
 													>
 														<ButtonGroup>
-															{HORIZONTAL_LABEL_POSITION.map((item) => (
+															{HORIZONTAL_LABEL_POSITION.map((item, index) => (
 																<Button
-																	// isLarge
+																	key={index}
 																	isPrimary={
 																		horizontalLabelPosition === item.value
 																	}
@@ -303,12 +274,12 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											</>
 										)}
 										<ToggleControl
-											label={__("Swap Images", "image-comparison")}
+											label={__("Swap Images", "essential-blocks")}
 											checked={swap}
 											onChange={() => onImageSwap()}
 										/>
 										<ToggleControl
-											label={__("No Handle", "image-comparison")}
+											label={__("No Handle", "essential-blocks")}
 											checked={noHandle}
 											onChange={() => setAttributes({ noHandle: !noHandle })}
 										/>
@@ -320,7 +291,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											}
 										>
 											<RangeControl
-												label={__("Slider Position", "image-comparison")}
+												label={__("Slider Position", "essential-blocks")}
 												value={position}
 												onChange={(position) => setAttributes({ position })}
 												min={0}
@@ -339,7 +310,7 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											}
 										>
 											<RangeControl
-												label={__("Slider Line Width", "image-comparison")}
+												label={__("Slider Line Width", "essential-blocks")}
 												value={lineWidth}
 												onChange={(lineWidth) => setAttributes({ lineWidth })}
 												min={0}
@@ -352,37 +323,26 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 							{tab.name === "styles" && (
 								<>
 									<PanelBody>
-										<ResponsiveDimensionsControl
-											resRequiredProps={resRequiredProps}
-											controlName={WRAPPER_MARGIN}
-											baseLabel={__("Margin", "image-comparison")}
-											disableLeftRight={true}
-										/>
-										<ResponsiveDimensionsControl
-											resRequiredProps={resRequiredProps}
-											controlName={WRAPPER_PADDING}
-											baseLabel={__("Padding", "image-comparison")}
-										/>
 										<ColorControl
-											label={__("Line Color", "image-comparison")}
+											label={__("Line Color", "essential-blocks")}
 											color={lineColor}
 											onChange={(lineColor) => setAttributes({ lineColor })}
 										/>
 									</PanelBody>
 									{showLabels && (
-										<PanelBody title={__("Labels", "image-comparison")}>
+										<PanelBody title={__("Labels", "essential-blocks")}>
 											<TypographyDropdown
-												baseLabel={__("Typography", "image-comparison")}
+												baseLabel={__("Typography", "essential-blocks")}
 												typographyPrefixConstant={typoPrefix_label}
 												resRequiredProps={resRequiredProps}
 											/>
 											<ColorControl
-												label={__("Color", "image-comparison")}
+												label={__("Color", "essential-blocks")}
 												color={labelColor}
 												onChange={(labelColor) => setAttributes({ labelColor })}
 											/>
 											<ColorControl
-												label={__("Background Color", "image-comparison")}
+												label={__("Background Color", "essential-blocks")}
 												color={labelBackgroundColor}
 												onChange={(labelBackgroundColor) =>
 													setAttributes({ labelBackgroundColor })
@@ -391,10 +351,29 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											<ResponsiveDimensionsControl
 												resRequiredProps={resRequiredProps}
 												controlName={LABEL_PADDING}
-												baseLabel={__("Padding", "image-comparison")}
+												baseLabel={__("Padding", "essential-blocks")}
 											/>
 										</PanelBody>
 									)}
+								</>
+							)}
+							{tab.name === "advance" && (
+								<>
+									<PanelBody>
+
+										<ResponsiveDimensionsControl
+											resRequiredProps={resRequiredProps}
+											controlName={WRAPPER_MARGIN}
+											baseLabel={__("Margin", "essential-blocks")}
+											disableLeftRight={true}
+										/>
+										<ResponsiveDimensionsControl
+											resRequiredProps={resRequiredProps}
+											controlName={WRAPPER_PADDING}
+											baseLabel={__("Padding", "essential-blocks")}
+										/>
+									</PanelBody>
+									<AdvancedControls attributes={attributes} setAttributes={setAttributes} />
 								</>
 							)}
 						</div>

@@ -5,18 +5,20 @@ import Edit from "./edit";
 import save from "./save";
 import example from "./example";
 import attributes from "./attributes";
+import deprecated from "./deprecated";
 import metadata from "../block.json";
 const { ebConditionalRegisterBlockType } = EBImageComparisonControls;
 
 ebConditionalRegisterBlockType(metadata, {
 	keywords: [
-		__("image compare", "image-comparison"),
-		__("comparison", "image-comparison"),
-		__("compare", "image-comparison"),
+		__("image compare", "essential-blocks"),
+		__("comparison", "essential-blocks"),
+		__("compare", "essential-blocks"),
 	],
 	attributes,
 	icon: ImageComparisonIcon,
 	edit: Edit,
 	save,
 	example,
+	deprecated,
 });

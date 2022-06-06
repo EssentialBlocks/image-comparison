@@ -19,15 +19,6 @@ import classnames from "classnames";
 
 import Inspector from "./inspector";
 
-// import {
-// 	softMinifyCssStrings,
-// 	mimmikCssForPreviewBtnClick,
-// 	duplicateBlockIdFix,
-// 	generateDimensionsControlStyles,
-// 	generateTypographyStyles,
-// 	generateResponsiveRangeStyles,
-// } from "../../../util/helpers";
-
 const {
 	softMinifyCssStrings,
 	// mimmikCssForPreviewBtnClick,
@@ -38,7 +29,7 @@ const {
 } = window.EBImageComparisonControls;
 
 const editorStoreForGettingPreivew =
-	eb_style_handler.editor_type === "edit-site"
+	eb_conditional_localize.editor_type === "edit-site"
 		? "core/edit-site"
 		: "core/edit-post";
 
@@ -74,6 +65,7 @@ const edit = (props) => {
 		noHandle,
 		labelColor,
 		labelBackgroundColor,
+		classHook,
 	} = attributes;
 
 	const hiddenImg = useRef(null);
@@ -155,19 +147,17 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthDesktop : ""}
 		}
 
-		${
-			showLabels
-				? `
+		${showLabels
+			? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelPaddingDesktop}
 				${labelTypoStylesDesktop}
 				${labelColor ? `color: ${labelColor} !important;` : ""}
-				${
-					labelBackgroundColor
-						? `background-color: ${labelBackgroundColor} !important;`
-						: ""
-				}
+				${labelBackgroundColor
+				? `background-color: ${labelBackgroundColor} !important;`
+				: ""
+			}
 			}
 
 			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-top div[data-testid="container"] >div:nth-child(4) div,
@@ -196,7 +186,7 @@ const edit = (props) => {
 				transform: none !important;
 			}
 			`
-				: ""
+			: ""
 		}
 	`;
 
@@ -207,16 +197,15 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthTab : ""}
 		}
 
-		${
-			showLabels
-				? `
+		${showLabels
+			? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesTab}
 				${labelPaddingTab}
 			}
 			`
-				: ""
+			: ""
 		}
 	`;
 
@@ -227,16 +216,15 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthMobile : ""}
 		}
 
-		${
-			showLabels
-				? `
+		${showLabels
+			? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesMobile}
 				${labelPaddingMobile}
 			}
 			`
-				: ""
+			: ""
 		}
 	`;
 
@@ -304,8 +292,8 @@ const edit = (props) => {
 		contentPosition === "center"
 			? " eb-image-comparison-align-center"
 			: contentPosition === "right"
-			? " eb-image-comparison-align-right"
-			: "";
+				? " eb-image-comparison-align-right"
+				: "";
 	const onImageSwap = () => {
 		let { leftImageURL, rightImageURL, swap } = attributes;
 		swap = !swap;
@@ -334,98 +322,100 @@ const edit = (props) => {
 			<div {...blockProps}>
 				<style>
 					{`
-			 ${desktopAllStyles}
-
-			 /* mimmikcssStart */
-
-			 ${resOption === "Tablet" ? tabAllStyles : " "}
-			 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
-
-			 /* mimmikcssEnd */
-
-			 @media all and (max-width: 1024px) {	
-
-				 /* tabcssStart */			
-				 ${softMinifyCssStrings(tabAllStyles)}
-				 /* tabcssEnd */			
-			 
-			 }
-			 
-			 @media all and (max-width: 767px) {
+				 ${desktopAllStyles}
+ 
+				 /* mimmikcssStart */
+ 
+				 ${resOption === "Tablet" ? tabAllStyles : " "}
+				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
+ 
+				 /* mimmikcssEnd */
+ 
+				 @media all and (max-width: 1024px) {	
+ 
+					 /* tabcssStart */			
+					 ${softMinifyCssStrings(tabAllStyles)}
+					 /* tabcssEnd */			
 				 
-				 /* mobcssStart */			
-				 ${softMinifyCssStrings(mobileAllStyles)}
-				 /* mobcssEnd */			
-			 
-			 }
-			 `}
+				 }
+				 
+				 @media all and (max-width: 767px) {
+					 
+					 /* mobcssStart */			
+					 ${softMinifyCssStrings(mobileAllStyles)}
+					 /* mobcssEnd */			
+				 
+				 }
+				 `}
 				</style>
-				<div
-					className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
-				>
-					{hasBothImages ? (
-						<>
-							<div className="eb-image-comparison-hide" ref={hiddenImg}>
-								<ReactCompareImage
-									leftImage={leftImageURL}
-									rightImage={rightImageURL}
-									{...(verticalMode ? { vertical: "vertical" } : {})}
-									{...(hover ? { hover: "hover" } : {})}
-									{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
-									{...(showLabels ? { rightImageLabel: afterLabel } : {})}
-									{...(noHandle ? { handle: <React.Fragment /> } : {})}
-									sliderPositionPercentage={position / 100}
-									sliderLineWidth={lineWidth ? lineWidth : 0}
-									sliderLineColor={lineColor}
+				<div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+					<div
+						className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
+					>
+						{hasBothImages ? (
+							<>
+								<div className="eb-image-comparison-hide" ref={hiddenImg}>
+									<ReactCompareImage
+										leftImage={leftImageURL}
+										rightImage={rightImageURL}
+										{...(verticalMode ? { vertical: "vertical" } : {})}
+										{...(hover ? { hover: "hover" } : {})}
+										{...(showLabels ? { leftImageLabel: beforeLabel } : {})}
+										{...(showLabels ? { rightImageLabel: afterLabel } : {})}
+										{...(noHandle ? { handle: <React.Fragment /> } : {})}
+										sliderPositionPercentage={position / 100}
+										sliderLineWidth={lineWidth ? lineWidth : 0}
+										sliderLineColor={lineColor}
+									/>
+								</div>
+							</>
+						) : (
+							<div className="eb-image-comparison-placeholder">
+								<MediaUpload
+									onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+									type="image"
+									value={leftImageURL}
+									render={({ open }) =>
+										!leftImageURL ? (
+											<Button
+												className="eb-image-comparison-upload components-button"
+												label={__("Upload Left Image", "essential-blocks")}
+												icon="format-image"
+												onClick={open}
+											/>
+										) : (
+											<img
+												className="eb-image-comparison-image"
+												src={leftImageURL}
+											/>
+										)
+									}
+								/>
+								<MediaUpload
+									onSelect={(media) =>
+										setAttributes({ rightImageURL: media.url })
+									}
+									type="image"
+									value={rightImageURL}
+									render={({ open }) =>
+										!rightImageURL ? (
+											<Button
+												className="eb-image-comparison-upload components-button"
+												label={__("Upload Right Image", "essential-blocks")}
+												icon="format-image"
+												onClick={open}
+											/>
+										) : (
+											<img
+												className="eb-image-comparison-image"
+												src={rightImageURL}
+											/>
+										)
+									}
 								/>
 							</div>
-						</>
-					) : (
-						<div className="eb-image-comparison-placeholder">
-							<MediaUpload
-								onSelect={(media) => setAttributes({ leftImageURL: media.url })}
-								type="image"
-								value={leftImageURL}
-								render={({ open }) =>
-									!leftImageURL ? (
-										<Button
-											className="eb-image-comparison-upload components-button"
-											label={__("Upload Left Image", "image-comparison")}
-											icon="format-image"
-											onClick={open}
-										/>
-									) : (
-										<img
-											className="eb-image-comparison-image"
-											src={leftImageURL}
-										/>
-									)
-								}
-							/>
-							<MediaUpload
-								onSelect={(media) =>
-									setAttributes({ rightImageURL: media.url })
-								}
-								type="image"
-								value={rightImageURL}
-								render={({ open }) =>
-									!rightImageURL ? (
-										<Button
-											className="eb-image-comparison-upload components-button"
-											label={__("Upload Right Image", "image-comparison")}
-											icon="format-image"
-											onClick={open}
-										/>
-									) : (
-										<img
-											className="eb-image-comparison-image"
-											src={rightImageURL}
-										/>
-									)
-								}
-							/>
-						</div>
-					)}
+						)}
+					</div>
 				</div>
 			</div>
 		</>

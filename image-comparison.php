@@ -44,7 +44,8 @@ function create_block_image_comparison_block_init()
     'wp-i18n',
     'wp-element',
     'wp-block-editor',
-    'eb-image-comparison-blocks-controls-util'
+    'eb-image-comparison-blocks-controls-util',
+    'essential-blocks-eb-animation'
   ));
 
   wp_register_script(
@@ -54,12 +55,29 @@ function create_block_image_comparison_block_init()
     $script_asset['version']
   );
 
+  $load_animation_js = EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . 'assets/js/eb-animation-load.js';
+  wp_register_script(
+    'essential-blocks-eb-animation',
+    $load_animation_js,
+    array(),
+    EB_IMAGE_COMPARISON_BLOCKS_VERSION,
+    true
+  );
+
+  $animate_css = EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . 'assets/css/animate.min.css';
+  wp_register_style(
+    'essential-blocks-animation',
+    $animate_css,
+    array(),
+    EB_IMAGE_COMPARISON_BLOCKS_VERSION
+  );
+
   $frontend_js_path = include_once dirname(__FILE__) . "/dist/frontend/index.asset.php";
   $frontend_js = "dist/frontend/index.js";
   wp_register_script(
     'eb-image-comparison-frontend',
     plugins_url($frontend_js, __FILE__),
-    array('wp-element'),
+    array('wp-element', 'essential-blocks-eb-animation'),
     $frontend_js_path['version'],
     true
   );
@@ -72,6 +90,7 @@ function create_block_image_comparison_block_init()
         'editor_script' => 'image-comparison-block-editor-js',
         'render_callback' => function ($attributes, $content) {
           if (!is_admin()) {
+            wp_enqueue_style('essential-blocks-animation');
             wp_enqueue_script('eb-image-comparison-frontend');
           }
           return $content;

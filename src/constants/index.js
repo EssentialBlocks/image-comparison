@@ -8,15 +8,15 @@ export const CONTENT_POSITION = [
 ];
 
 export const HORIZONTAL_LABEL_POSITION = [
-	{ label: __("Top", "image-comparison"), value: "top" },
-	{ label: __("Center", "image-comparison"), value: "center" },
-	{ label: __("Bottom", "image-comparison"), value: "bottom" },
+	{ label: __("Top", "essential-blocks"), value: "top" },
+	{ label: __("Center", "essential-blocks"), value: "center" },
+	{ label: __("Bottom", "essential-blocks"), value: "bottom" },
 ];
 
 export const VERTICAL_LABEL_POSITION = [
-	{ label: __("Left", "image-comparison"), value: "left" },
-	{ label: __("Center", "image-comparison"), value: "center" },
-	{ label: __("Right", "image-comparison"), value: "right" },
+	{ label: __("Left", "essential-blocks"), value: "left" },
+	{ label: __("Center", "essential-blocks"), value: "center" },
+	{ label: __("Right", "essential-blocks"), value: "right" },
 ];
 
 export const IMAGE_WIDTH = "imgWidth";

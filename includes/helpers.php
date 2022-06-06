@@ -40,13 +40,15 @@ class Image_Comparison_Helper
      */
     public function enqueues($hook)
     {
+        global $pagenow;
+
         /**
-         * Only for Admin Add/Edit Pages 
+         * Only for admin add/edit pages/posts
          */
-        if ($hook == 'post-new.php' || $hook == 'post.php' || $hook == 'site-editor.php') {
+        if ($pagenow == 'post-new.php' || $pagenow == 'post.php' || $pagenow == 'site-editor.php' || ($pagenow == 'themes.php' && !empty($_SERVER['QUERY_STRING']) && str_contains($_SERVER['QUERY_STRING'], 'gutenberg-edit-site'))) {
+
             $controls_dependencies = include_once EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH . '/dist/controls.asset.php';
 
-            // var_dump($controls_dependencies);die;
             wp_register_script(
                 "eb-image-comparison-blocks-controls-util",
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.js',
@@ -60,10 +62,20 @@ class Image_Comparison_Helper
                 'rest_rootURL' => get_rest_url(),
             ));
 
+            if ($pagenow == 'post-new.php' || $pagenow == 'post.php') {
+                wp_localize_script('eb-image-comparison-blocks-controls-util', 'eb_conditional_localize', array(
+                    'editor_type' => 'edit-post'
+                ));
+            } else if ($pagenow == 'site-editor.php' || $pagenow == 'themes.php') {
+                wp_localize_script('eb-image-comparison-blocks-controls-util', 'eb_conditional_localize', array(
+                    'editor_type' => 'edit-site'
+                ));
+            }
+
             wp_enqueue_style(
                 'essential-blocks-editor-css',
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.css',
-                array(),
+                array('essential-blocks-animation'),
                 $controls_dependencies['version'],
                 'all'
             );

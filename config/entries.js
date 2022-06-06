@@ -8,10 +8,13 @@ export { default as ResponsiveRangeController } from "../controls/src/controls/r
 export { default as ColorControl } from "../controls/src/controls/color-control";
 export { default as ImageAvatar } from "../controls/src/controls/image-avatar";
 export { default as ResetControl } from "../controls/src/controls/reset-control";
+
+import "../controls/src/group-controls";
+export { default as AdvancedControls } from "../controls/src/group-controls/components/advanced-controls";
+
 //Export Helper Functions
 export {
 	generateResponsiveRangeStyles,
-	enerateTypographyStyles,
 	generateDimensionsControlStyles,
 	duplicateBlockIdFix,
 	softMinifyCssStrings,
