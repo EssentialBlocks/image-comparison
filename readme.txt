@@ -81,6 +81,10 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
+= 1.3.1 - dev =
+* Added: Animation, Custom Css and Resposive Options
+* Improved: Controls & structure
+
 = 1.3.0 - 09/02/2022 =
 * Fixed: Block Base theme support
 * Improved: Font Library Updated
