@@ -1,4 +1,4 @@
-const { useBlockProps } = wp.blockEditor;
+import { useBlockProps } from "@wordpress/block-editor";
 
 const Save = ({ attributes }) => {
 	const {
@@ -17,14 +17,15 @@ const Save = ({ attributes }) => {
 		horizontalLabelPosition,
 		verticalLabelPosition,
 		noHandle,
+		classHook,
 	} = attributes;
 
 	const alignmentClass =
 		contentPosition === "center"
 			? " eb-image-comparison-align-center"
 			: contentPosition === "right"
-			? " eb-image-comparison-align-right"
-			: "";
+				? " eb-image-comparison-align-right"
+				: "";
 	let labelPostionClass = verticalMode
 		? ` eb-label-vertical-${verticalLabelPosition}`
 		: ` eb-label-horizontal-${horizontalLabelPosition}`;
@@ -32,20 +33,39 @@ const Save = ({ attributes }) => {
 	return (
 		<>
 			<div {...useBlockProps.save()}>
-				<div
-					className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
-					data-left-image={leftImageURL}
-					data-right-image={rightImageURL}
-					data-vertical-mode={verticalMode}
-					data-hover={hover}
-					data-show-label={showLabels}
-					data-left-label={beforeLabel}
-					data-right-label={afterLabel}
-					data-slider-position={position}
-					data-line-width={lineWidth}
-					data-line-color={lineColor}
-					data-handle={noHandle}
-				></div>
+				<div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook}`}>
+					<div
+						className={`eb-image-comparison-wrapper ${blockId}${alignmentClass}${labelPostionClass}`}
+						data-left-image={leftImageURL}
+						data-right-image={rightImageURL}
+						data-vertical-mode={verticalMode}
+						data-hover={hover}
+						data-show-label={showLabels}
+						data-left-label={beforeLabel}
+						data-right-label={afterLabel}
+						data-slider-position={position}
+						data-line-width={lineWidth}
+						data-line-color={lineColor}
+						data-handle={noHandle}
+					>
+						{leftImageURL && rightImageURL && (
+							<>
+								<div data-testid="container">
+									<img
+										alt="Left Image"
+										src={leftImageURL}
+										data-testid="left-image"
+									/>
+									<img
+										alt="Right Image"
+										src={rightImageURL}
+										data-testid="right-image"
+									/>
+								</div>
+							</>
+						)}
+					</div>
+				</div>
 			</div>
 		</>
 	);

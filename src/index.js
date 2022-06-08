@@ -1,22 +1,24 @@
-const { registerBlockType } = wp.blocks;
-const { __ } = wp.i18n;
+import { __ } from "@wordpress/i18n";
 
-import "./style.scss";
+import { ImageComparisonIcon } from "./icon";
 import Edit from "./edit";
-import save from "./Save";
-import icon from "./icon";
+import save from "./save";
+import example from "./example";
 import attributes from "./attributes";
+import deprecated from "./deprecated";
+import metadata from "../block.json";
+const { ebConditionalRegisterBlockType } = EBImageComparisonControls;
 
-registerBlockType("image-comparison/image-comparison", {
-	title: __("Image Comparison", "image-comparison"),
-	description: __(
-		"Let the visitors compare images & make your website interactive",
-		"image-comparison"
-	),
-	category: "widgets",
-	keywords: [__("image compare"), __("comparison"), __("compare")],
+ebConditionalRegisterBlockType(metadata, {
+	keywords: [
+		__("image compare", "essential-blocks"),
+		__("comparison", "essential-blocks"),
+		__("compare", "essential-blocks"),
+	],
 	attributes,
-	icon,
+	icon: ImageComparisonIcon,
 	edit: Edit,
 	save,
+	example,
+	deprecated,
 });
