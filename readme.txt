@@ -82,7 +82,7 @@ Yes, it will work with any standard WordPress theme.
 == Changelog ==
 
 = 1.3.3 - dev =
-* Added: Converted style-handler to php for working perfectly with Reusable blocks and FSE
+* Improved: Controls and structure
 
 = 1.3.2 - 08/06/2022 =
 * Hotfix: Controls file not found issue
