@@ -52,7 +52,7 @@ class Image_Comparison_Helper
             wp_register_script(
                 "eb-image-comparison-blocks-controls-util",
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.js',
-                array_merge($controls_dependencies['dependencies'], array("essential-blocks-edit-post")),
+                array_merge($controls_dependencies['dependencies']),
                 $controls_dependencies['version'],
                 true
             );

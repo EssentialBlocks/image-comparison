@@ -28,11 +28,6 @@ const {
 	generateResponsiveRangeStyles,
 } = window.EBImageComparisonControls;
 
-const editorStoreForGettingPreivew =
-	eb_conditional_localize.editor_type === "edit-site"
-		? "core/edit-site"
-		: "core/edit-post";
-
 import {
 	IMAGE_WIDTH,
 	WRAPPER_MARGIN,
@@ -227,15 +222,6 @@ const edit = (props) => {
 			: ""
 		}
 	`;
-
-	// this useEffect is for setting the resOption attribute to desktop/tab/mobile depending on the added 'eb-res-option-' class
-	useEffect(() => {
-		setAttributes({
-			resOption: select(
-				editorStoreForGettingPreivew
-			).__experimentalGetPreviewDeviceType(),
-		});
-	}, []);
 
 	// this useEffect is for creating an unique id for each block's unique className by a random unique number
 	useEffect(() => {
