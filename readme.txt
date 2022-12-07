@@ -2,8 +2,8 @@
 Contributors: wpdevteam, re_enter_rupok, Asif2BD, fencermonir, rahat89
 Tags: block, blocks, image, compare, comparison, image compare, image comparison, before after, gutenberg, gutenberg blocks
 Requires at least: 5.6
-Tested up to: 6.0
-Stable tag: 1.3.3
+Tested up to: 6.1
+Stable tag: 1.3.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -22,14 +22,14 @@ Use **Image Comparison** plugin & let your visitors compare images to make your 
 
 ## 🚀 BACKED BY A TRUSTED TEAM ##
 
-This Block is brought to you by [WPDeveloper](https://wpdeveloper.net), the team behind the most popular elements library [Essential Addons for Elementor](https://wordpress.org/plugins/essential-addons-for-elementor-lite/) (used by almost 700,000 happy users from 180+ countries).
+This Block is brought to you by [WPDeveloper](https://wpdeveloper.com), the team behind the most popular elements library [Essential Addons for Elementor](https://wordpress.org/plugins/essential-addons-for-elementor-lite/) (used by almost 1 million+ happy users from 180+ countries).
 
 ## 👨‍💻 DOCUMENTATION AND SUPPORT ##
 
 - For documentation and tutorials go to our [documentation](https://essential-blocks.com/docs/)
 - To report issue and contribution visit [Github](https://github.com/EssentialBlocks/image-comparison/).
 - If you have any more questions, visit our support on the [Plugin's Forum](https://wordpress.org/support/plugin/image-comparison/).
-- For more information about features, FAQs and documentation, check out our website at [WPDeveloper](https://wpdeveloper.net/).
+- For more information about features, FAQs and documentation, check out our website at [WPDeveloper](https://wpdeveloper.com/).
 
 ## 🙌 JOIN THE COMMUNITY ##
 
@@ -80,6 +80,9 @@ Yes, it will work with any standard WordPress theme.
 
 
 == Changelog ==
+= 1.3.4 - 07/12/2022 =
+* Improved: Controls and structure
+* Fixed: Minor issues
 
 = 1.3.3 - 28/08/2022 =
 * Improved: Controls and structure
