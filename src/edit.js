@@ -142,17 +142,19 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthDesktop : ""}
 		}
 
-		${showLabels
-			? `
+		${
+			showLabels
+				? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelPaddingDesktop}
 				${labelTypoStylesDesktop}
 				${labelColor ? `color: ${labelColor} !important;` : ""}
-				${labelBackgroundColor
-				? `background-color: ${labelBackgroundColor} !important;`
-				: ""
-			}
+				${
+					labelBackgroundColor
+						? `background-color: ${labelBackgroundColor} !important;`
+						: ""
+				}
 			}
 
 			.eb-image-comparison-wrapper.${blockId}.eb-label-horizontal-top div[data-testid="container"] >div:nth-child(4) div,
@@ -181,7 +183,7 @@ const edit = (props) => {
 				transform: none !important;
 			}
 			`
-			: ""
+				: ""
 		}
 	`;
 
@@ -192,15 +194,16 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthTab : ""}
 		}
 
-		${showLabels
-			? `
+		${
+			showLabels
+				? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesTab}
 				${labelPaddingTab}
 			}
 			`
-			: ""
+				: ""
 		}
 	`;
 
@@ -211,15 +214,16 @@ const edit = (props) => {
 			${!fullWidth ? imageWidthMobile : ""}
 		}
 
-		${showLabels
-			? `
+		${
+			showLabels
+				? `
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(4) div,
 			.eb-image-comparison-wrapper.${blockId} div[data-testid="container"] >div:nth-child(5) div {
 				${labelTypoStylesMobile}
 				${labelPaddingMobile}
 			}
 			`
-			: ""
+				: ""
 		}
 	`;
 
@@ -278,8 +282,8 @@ const edit = (props) => {
 		contentPosition === "center"
 			? " eb-image-comparison-align-center"
 			: contentPosition === "right"
-				? " eb-image-comparison-align-right"
-				: "";
+			? " eb-image-comparison-align-right"
+			: "";
 	const onImageSwap = () => {
 		let { leftImageURL, rightImageURL, swap } = attributes;
 		swap = !swap;
@@ -309,28 +313,28 @@ const edit = (props) => {
 				<style>
 					{`
 				 ${desktopAllStyles}
- 
+
 				 /* mimmikcssStart */
- 
+
 				 ${resOption === "Tablet" ? tabAllStyles : " "}
 				 ${resOption === "Mobile" ? tabAllStyles + mobileAllStyles : " "}
- 
+
 				 /* mimmikcssEnd */
- 
-				 @media all and (max-width: 1024px) {	
- 
-					 /* tabcssStart */			
+
+				 @media all and (max-width: 1024px) {
+
+					 /* tabcssStart */
 					 ${softMinifyCssStrings(tabAllStyles)}
-					 /* tabcssEnd */			
-				 
+					 /* tabcssEnd */
+
 				 }
-				 
+
 				 @media all and (max-width: 767px) {
-					 
-					 /* mobcssStart */			
+
+					 /* mobcssStart */
 					 ${softMinifyCssStrings(mobileAllStyles)}
-					 /* mobcssEnd */			
-				 
+					 /* mobcssEnd */
+
 				 }
 				 `}
 				</style>
@@ -358,7 +362,9 @@ const edit = (props) => {
 						) : (
 							<div className="eb-image-comparison-placeholder">
 								<MediaUpload
-									onSelect={(media) => setAttributes({ leftImageURL: media.url })}
+									onSelect={(media) =>
+										setAttributes({ leftImageURL: media.url })
+									}
 									type="image"
 									value={leftImageURL}
 									render={({ open }) =>
