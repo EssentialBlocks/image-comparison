@@ -2,8 +2,8 @@
 Contributors: wpdevteam, re_enter_rupok, Asif2BD, fencermonir, rahat89
 Tags: block, blocks, image, compare, comparison, image compare, image comparison, before after, gutenberg, gutenberg blocks
 Requires at least: 5.6
-Tested up to: 6.1
-Stable tag: 1.3.4
+Tested up to: 6.2
+Stable tag: 1.3.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -80,6 +80,10 @@ Yes, it will work with any standard WordPress theme.
 
 
 == Changelog ==
+
+= 1.3.5 - dev =
+* Improved: controls and structure
+
 = 1.3.4 - 07/12/2022 =
 * Improved: Controls and structure
 * Fixed: Minor issues
