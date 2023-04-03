@@ -22,6 +22,7 @@
  */
 
 require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/font-loader.php';
 require_once __DIR__ . '/lib/style-handler/style-handler.php';
 
 function create_block_image_comparison_block_init() {
