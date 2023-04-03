@@ -81,7 +81,7 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
-= 1.3.5 - dev =
+= 1.3.5 - 03/04/2023 =
 * Improved: controls and structure
 
 = 1.3.4 - 07/12/2022 =
