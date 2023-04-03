@@ -90,9 +90,9 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 							className: "eb-tab styles",
 						},
 						{
-							name: 'advance',
+							name: "advance",
 							title: __("Advanced", "essential-blocks"),
-							className: 'eb-tab advance',
+							className: "eb-tab advance",
 						},
 					]}
 				>
@@ -346,7 +346,6 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 							{tab.name === "advance" && (
 								<>
 									<PanelBody>
-
 										<ResponsiveDimensionsControl
 											resRequiredProps={resRequiredProps}
 											controlName={WRAPPER_MARGIN}
@@ -359,7 +358,10 @@ const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
 											baseLabel={__("Padding", "essential-blocks")}
 										/>
 									</PanelBody>
-									<AdvancedControls attributes={attributes} setAttributes={setAttributes} />
+									<AdvancedControls
+										attributes={attributes}
+										setAttributes={setAttributes}
+									/>
 								</>
 							)}
 						</div>
