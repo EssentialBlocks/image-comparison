@@ -1,9 +1,10 @@
 === Image Comparison ===
 Contributors: wpdevteam, re_enter_rupok, Asif2BD, fencermonir, rahat89
 Tags: block, blocks, image, compare, comparison, image compare, image comparison, before after, gutenberg, gutenberg blocks
-Requires at least: 5.6
-Tested up to: 6.2
-Stable tag: 1.3.6
+Requires at least: 6.0
+Requires PHP: 7.4
+Tested up to: 7.0
+Stable tag: 1.5.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -80,6 +81,13 @@ Yes, it will work with any standard WordPress theme.
 
 
 == Changelog ==
+
+= 1.5.0 - 09/08/2026 =
+* Fixed: Fatal error when the `lib/style-handler` submodule is missing
+* Fixed: PHP 8 compatibility issues (`str_contains()` on PHP < 8.0, trailing comma in function call on PHP < 7.3, illegal array offset in font loader)
+* Fixed: WordPress version detection used a float cast, which misread two-digit minor versions
+* Improved: Compatibility tested from PHP 7.4 to 8.5 and WordPress 6.0 to 7.0
+* Changed: Minimum requirements raised to WordPress 6.0 and PHP 7.4
 
 = 1.3.6 - 06/12/2023 =
 * Fixed: script dependency issue

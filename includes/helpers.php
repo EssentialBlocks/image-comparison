@@ -45,15 +45,28 @@ class Image_Comparison_Helper
         /**
          * Only for admin add/edit pages/posts
          */
-        if ($pagenow == 'post-new.php' || $pagenow == 'post.php' || $pagenow == 'site-editor.php' || ($pagenow == 'themes.php' && !empty($_SERVER['QUERY_STRING']) && str_contains($_SERVER['QUERY_STRING'], 'gutenberg-edit-site'))) {
+        $query_string = isset($_SERVER['QUERY_STRING']) ? sanitize_text_field(wp_unslash($_SERVER['QUERY_STRING'])) : '';
 
-            $controls_dependencies = include_once EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH . '/dist/controls.asset.php';
+        if ($pagenow == 'post-new.php' || $pagenow == 'post.php' || $pagenow == 'site-editor.php' || ($pagenow == 'themes.php' && !empty($query_string) && strpos($query_string, 'gutenberg-edit-site') !== false)) {
+
+            $controls_asset_path = EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH . '/dist/controls.asset.php';
+            if (!file_exists($controls_asset_path)) {
+                return;
+            }
+
+            $controls_dependencies = require $controls_asset_path;
+            if (!is_array($controls_dependencies)) {
+                return;
+            }
+
+            $controls_deps    = isset($controls_dependencies['dependencies']) && is_array($controls_dependencies['dependencies']) ? $controls_dependencies['dependencies'] : array();
+            $controls_version = isset($controls_dependencies['version']) ? $controls_dependencies['version'] : EB_IMAGE_COMPARISON_BLOCKS_VERSION;
 
             wp_register_script(
                 "eb-image-comparison-blocks-controls-util",
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.js',
-                array_merge($controls_dependencies['dependencies']),
-                $controls_dependencies['version'],
+                $controls_deps,
+                $controls_version,
                 true
             );
 
@@ -72,18 +85,40 @@ class Image_Comparison_Helper
                 ));
             }
 
+            /**
+             * Every Essential Blocks standalone plugin registers the same
+             * `editor.BlockEdit` / `essential-blocks/global` filter from its own
+             * bundled copy of the controls library. @wordpress/hooks stacks
+             * same-namespace handlers instead of replacing them, so with more
+             * than one of these plugins active the advanced-controls HOC wraps
+             * each block repeatedly and the copies loop against each other until
+             * React aborts with "Maximum update depth exceeded". Keep one.
+             */
+            wp_enqueue_script(
+                'eb-image-comparison-global-filter-dedupe',
+                EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . 'assets/js/eb-global-filter-dedupe.js',
+                array('wp-hooks', 'wp-dom-ready'),
+                EB_IMAGE_COMPARISON_BLOCKS_VERSION,
+                true
+            );
+
             wp_enqueue_style(
                 'essential-blocks-editor-css',
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.css',
                 array('essential-blocks-animation'),
-                $controls_dependencies['version'],
+                $controls_version,
                 'all'
             );
         }
     }
     public static function get_block_register_path($blockname, $blockPath)
     {
-        if ((float) get_bloginfo('version') <= 5.6) {
+        /**
+         * A float cast breaks on two-digit minors ("5.10" casts to 5.1) and on
+         * majors above 9, so the comparison is done with version_compare().
+         * `< 5.7` is the exact equivalent of the original `<= 5.6` intent.
+         */
+        if (version_compare(get_bloginfo('version'), '5.7', '<')) {
             return $blockname;
         } else {
             return $blockPath;
