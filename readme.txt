@@ -1,5 +1,5 @@
 === Image Comparison ===
-Contributors: wpdevteam, re_enter_rupok, Asif2BD, fencermonir, rahat89, RahatSheikhLeon
+Contributors: wpdevteam, re_enter_rupok, Asif2BD, rahat89, RahatSheikhLeon
 Tags: block, blocks, image, compare, comparison, image compare, image comparison, before after, gutenberg, gutenberg blocks
 Requires at least: 6.0
 Requires PHP: 7.4
