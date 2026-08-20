@@ -4,7 +4,7 @@ Tags: block, blocks, image, compare, comparison, image compare, image comparison
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 1.5.0
+Stable tag: 1.4.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -82,12 +82,13 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
-= 1.5.0 - 09/08/2026 =
-* Fixed: Fatal error when the `lib/style-handler` submodule is missing
-* Fixed: PHP 8 compatibility issues (`str_contains()` on PHP < 8.0, trailing comma in function call on PHP < 7.3, illegal array offset in font loader)
-* Fixed: WordPress version detection used a float cast, which misread two-digit minor versions
-* Improved: Compatibility tested from PHP 7.4 to 8.5 and WordPress 6.0 to 7.0
-* Changed: Minimum requirements raised to WordPress 6.0 and PHP 7.4
+= 1.4.0 - 20/08/2026 =
+* Fixed: PHP 8.0–8.5 compatibility issues
+* Fixed: WordPress version detection
+* Fixed: PHP 7.x compatibility
+* Fixed: Asset loading issues on newer WordPress versions
+* Improved: Asset loading and overall stability
+* Tested up to WordPress 7.0.4
 
 = 1.3.6 - 06/12/2023 =
 * Fixed: script dependency issue

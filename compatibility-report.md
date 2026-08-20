@@ -1,7 +1,7 @@
 # Image Comparison — PHP / WordPress Compatibility Report
 
 - **Plugin:** Image Comparison (`image-comparison`)
-- **Version audited:** 1.3.6 → bumped to **1.5.0**
+- **Version audited:** 1.3.6 → bumped to **1.4.0**
 - **Branch:** `image-comparison-dev` (branched from `latest`)
 - **Date of audit:** 2026-08-09
 - **Nothing committed or pushed.** All changes left in the working tree.
@@ -154,7 +154,7 @@ None that could not be reconciled. The one judgement call, now decided:
 **Plugin header** (`image-comparison.php`):
 
 ```
-Version:           1.5.0
+Version:           1.4.0
 Requires at least: 6.0
 Tested up to:      7.0
 Requires PHP:      7.4
@@ -166,12 +166,12 @@ Requires PHP:      7.4
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 1.5.0
+Stable tag: 1.4.0
 ```
 
 **Declared range: PHP 7.4 → 8.5, WordPress 6.0 → 7.0.** The code was verified clean across the wider PHP 5.6 → 8.5 / WP 5.6 → 7.0 range (section 2); the declaration is the narrower, deliberately-supported window.
 
-Version bumped **1.3.6 → 1.5.0** (minor). Kept in sync across: plugin header, `readme.txt` `Stable tag`, `EB_IMAGE_COMPARISON_BLOCKS_VERSION`, and `package.json` (which was stale at `1.3.5` — now `1.5.0`). A `1.5.0` changelog entry was added to `readme.txt`.
+Version bumped **1.3.6 → 1.4.0** (minor). Kept in sync across: plugin header, `readme.txt` `Stable tag`, `EB_IMAGE_COMPARISON_BLOCKS_VERSION`, and `package.json` (which was stale at `1.3.5` — now `1.4.0`). A `1.4.0` changelog entry was added to `readme.txt`.
 
 ---
 

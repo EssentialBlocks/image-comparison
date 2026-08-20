@@ -4,7 +4,7 @@
  * Plugin Name:     Image Comparison
  * Plugin URI:      https://essential-blocks.com
  * Description:     Let the visitors compare images & make your website interactive.
- * Version:         1.5.0
+ * Version:         1.4.0
  * Author:          WPDeveloper
  * Author URI:      https://wpdeveloper.net
  * License:         GPL-3.0-or-later
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'EB_IMAGE_COMPARISON_BLOCKS_VERSION' ) ) {
-    define( 'EB_IMAGE_COMPARISON_BLOCKS_VERSION', '1.5.0' );
+    define( 'EB_IMAGE_COMPARISON_BLOCKS_VERSION', '1.4.0' );
 }
 if ( ! defined( 'EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL' ) ) {
     define( 'EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL', plugin_dir_url( __FILE__ ) );

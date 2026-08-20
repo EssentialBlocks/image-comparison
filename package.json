@@ -1,6 +1,6 @@
 {
 	"name": "image-comparison",
-	"version": "1.5.0",
+	"version": "1.4.0",
 	"description": "Example block written with ESNext standard and JSX support – build step required.",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
