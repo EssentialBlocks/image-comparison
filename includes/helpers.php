@@ -102,11 +102,20 @@ class Image_Comparison_Helper
                 true
             );
 
+            /**
+             * `$controls_version` is the hash of the *script* build, so a
+             * stylesheet-only change ships under an unchanged `?ver=` and every
+             * browser keeps serving the cached copy. Version the stylesheet by
+             * its own mtime so CSS fixes actually reach the editor.
+             */
+            $controls_css_path    = EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH . '/dist/controls.css';
+            $controls_css_version = file_exists($controls_css_path) ? (string) filemtime($controls_css_path) : $controls_version;
+
             wp_enqueue_style(
                 'essential-blocks-editor-css',
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.css',
                 array('essential-blocks-animation'),
-                $controls_version,
+                $controls_css_version,
                 'all'
             );
         }
