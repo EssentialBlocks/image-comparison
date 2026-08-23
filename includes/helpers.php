@@ -62,6 +62,19 @@ class Image_Comparison_Helper
             $controls_deps    = isset($controls_dependencies['dependencies']) && is_array($controls_dependencies['dependencies']) ? $controls_dependencies['dependencies'] : array();
             $controls_version = isset($controls_dependencies['version']) ? $controls_dependencies['version'] : EB_IMAGE_COMPARISON_BLOCKS_VERSION;
 
+            /**
+             * The controls bundle contains Babel-compiled `async`/`await` (the font picker
+             * requests `/wp/v2/font-families`), which resolves `window.regeneratorRuntime`
+             * at call time. DependencyExtractionWebpackPlugin externalises that global but
+             * emits `wp-polyfill` instead of the `regenerator-runtime` handle, because
+             * wp-polyfill used to bundle it. WordPress 7.1's wp-polyfill no longer does, so
+             * without this the font picker throws "Cannot read properties of undefined
+             * (reading 'mark')" the moment the Typography panel is opened.
+             */
+            if (!in_array('regenerator-runtime', $controls_deps, true)) {
+                $controls_deps[] = 'regenerator-runtime';
+            }
+
             wp_register_script(
                 "eb-image-comparison-blocks-controls-util",
                 EB_IMAGE_COMPARISON_BLOCKS_ADMIN_URL . '/dist/controls.js',
