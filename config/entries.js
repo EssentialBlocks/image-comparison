@@ -1,5 +1,5 @@
 //Export All Controls
-import "../controls/src/backend-css";
+import "../controls/src/backend.scss";
 
 //Export All Controls
 export { default as TypographyDropdown } from "../controls/src/controls/typography-control-v2";

@@ -48,8 +48,9 @@ class EB_Image_Comparison_Font_Loader {
      * @access public
      */
     public function get_fonts_on_render_block( $block_content, $block ) {
-        if ( isset( $block['attrs'] ) ) {
-            if ( 'essential-blocks' === self::$block_name || $block['blockName'] === self::$block_name ) {
+        if ( isset( $block['attrs'] ) && is_array( $block['attrs'] ) ) {
+            $block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
+            if ( 'essential-blocks' === self::$block_name || $block_name === self::$block_name ) {
                 $fonts        = self::get_fonts_family( $block['attrs'] );
                 self::$gfonts = array_unique( array_merge( self::$gfonts, $fonts ) );
             }
@@ -64,9 +65,21 @@ class EB_Image_Comparison_Font_Loader {
      * @access public
      */
     public static function get_fonts_family( $attributes ) {
-        $keys             = preg_grep( '/^(\w+)FontFamily/i', array_keys( $attributes ), 0 );
         $googleFontFamily = [];
+        if ( ! is_array( $attributes ) ) {
+            return $googleFontFamily;
+        }
+
+        $keys = preg_grep( '/^(\w+)FontFamily/i', array_keys( $attributes ), 0 );
+        if ( empty( $keys ) ) {
+            return $googleFontFamily;
+        }
+
         foreach ( $keys as $key ) {
+            // A non-string value would be an illegal array offset (TypeError on PHP 8+).
+            if ( ! is_string( $attributes[$key] ) || '' === $attributes[$key] ) {
+                continue;
+            }
             $googleFontFamily[$attributes[$key]] = $attributes[$key];
         }
         return $googleFontFamily;
@@ -81,7 +94,7 @@ class EB_Image_Comparison_Font_Loader {
         $googleFont = true;
         if ( 'essential-blocks' === self::$block_name ) {
             $eb_settings = get_option( 'eb_settings', [] );
-            $googleFont  = ! empty( $eb_settings['googleFont'] ) ? $eb_settings['googleFont'] : 'true';
+            $googleFont  = ( is_array( $eb_settings ) && ! empty( $eb_settings['googleFont'] ) ) ? $eb_settings['googleFont'] : 'true';
         }
 
         if ( 'false' !== $googleFont ) {
@@ -94,6 +107,10 @@ class EB_Image_Comparison_Font_Loader {
                 $gfonts      = '';
                 $gfonts_attr = ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic';
                 foreach ( $fonts as $font ) {
+                    // Passing null/non-string to trim() is deprecated on PHP 8.1+.
+                    if ( ! is_string( $font ) || '' === trim( $font ) ) {
+                        continue;
+                    }
                     $gfonts .= str_replace( ' ', '+', trim( $font ) ) . $gfonts_attr . '|';
                 }
                 if ( ! empty( $gfonts ) ) {

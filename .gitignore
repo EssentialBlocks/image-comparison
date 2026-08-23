@@ -9,11 +9,15 @@ yarn-error.log*
 coverage
 
 # dist files
+#
+# dist/index.js and dist/index.asset.php are the block's editor bundle and MUST be
+# tracked. Without them the block registers server-side with no editor script and
+# never appears in the block inserter. Every sibling plugin (infobox, flipbox,
+# number-counter …) tracks its own dist/index.js for exactly this reason.
+# Only the source maps and the unused style build are ignored.
 
-dist/index.js
-dist/index.asset.php
-dist/style.css
 dist/index.js.map
+dist/style.css
 dist/style.css.map
 
 # Dependency directories
@@ -33,4 +37,3 @@ node_modules/
 
 # MAC device files
 .DS_Store
-package-lock.json
