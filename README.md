@@ -2,7 +2,7 @@
 
 Let your visitors compare images and make your website interactive — a standalone Gutenberg block plugin by [WPDeveloper](https://wpdeveloper.com), part of the [Essential Blocks](https://essential-blocks.com) family.
 
-[![WordPress](https://img.shields.io/badge/WordPress-6.0%20–%207.0-blue.svg)](https://wordpress.org/plugins/image-comparison/)
+[![WordPress](https://img.shields.io/badge/WordPress-6.0%20–%207.1-blue.svg)](https://wordpress.org/plugins/image-comparison/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%20–%208.5-777bb4.svg)](https://www.php.net/)
 [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -24,7 +24,7 @@ The front-end slider is powered by [`react-compare-image`](https://github.com/ju
 
 | | Minimum | Tested up to |
 | --- | --- | --- |
-| WordPress | 6.0 | 7.0 |
+| WordPress | 6.0 | 7.1 |
 | PHP | 7.4 | 8.5 |
 
 ## Installation
