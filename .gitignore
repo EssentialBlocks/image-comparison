@@ -37,3 +37,6 @@ node_modules/
 
 # MAC device files
 .DS_Store
+
+# Source maps expose the private controls source
+*.map

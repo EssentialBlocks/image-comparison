@@ -1,6 +1,10 @@
 import { render } from "@wordpress/element";
 import ReactCompareImage from "react-compare-image";
 
+// Accept only plain colour values for the slider line.
+const SAFE_COLOR =
+	/^(#[0-9a-f]{3,8}|(rgb|hsl)a?\([\d\s.,%\/]+\)|var\(--[\w-]+\)|[a-z]+)$/i;
+
 window.addEventListener("DOMContentLoaded", (event) => {
 	const wrappers = document.getElementsByClassName(
 		`eb-image-comparison-wrapper`
@@ -17,6 +21,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		let sliderPosition = wrapper.getAttribute("data-slider-position");
 		let sliderLineWidth = wrapper.getAttribute("data-line-width");
 		let sliderLineColor = wrapper.getAttribute("data-line-color");
+		if (sliderLineColor && !SAFE_COLOR.test(sliderLineColor.trim())) {
+			sliderLineColor = null;
+		}
 		let noHandle = wrapper.getAttribute("data-handle");
 		render(
 			<ReactCompareImage
