@@ -99,7 +99,6 @@ Issues and pull requests are welcome at [EssentialBlocks/image-comparison](https
 - [wpdevteam](https://profiles.wordpress.org/wpdevteam/) — WPDeveloper
 - [re_enter_rupok](https://profiles.wordpress.org/re_enter_rupok/)
 - [Asif2BD](https://profiles.wordpress.org/asif2bd/)
-- [fencermonir](https://profiles.wordpress.org/fencermonir/)
 - [rahat89](https://profiles.wordpress.org/rahat89/)
 - [RahatSheikhLeon](https://github.com/RahatSheikhLeon)
 
