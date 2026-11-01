@@ -117,26 +117,27 @@ function create_block_image_comparison_block_init() {
         true
     );
 
-    if ( ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/image-comparison' ) ) {
-        $block_args = array(
-            'render_callback' => function ( $attributes, $content ) {
-                if ( ! is_admin() ) {
-                    wp_enqueue_style( 'essential-blocks-animation' );
-                    wp_enqueue_script( 'eb-image-comparison-frontend' );
-                }
-                return $content;
+    $block_args = array(
+        'render_callback' => function ( $attributes, $content ) {
+            if ( ! is_admin() ) {
+                wp_enqueue_style( 'essential-blocks-animation' );
+                wp_enqueue_script( 'eb-image-comparison-frontend' );
             }
-        );
-
-        if ( is_array( $script_asset ) ) {
-            $block_args['editor_script'] = 'image-comparison-block-editor-js';
+            return $content;
         }
+    );
 
-        register_block_type(
-            Image_Comparison_Helper::get_block_register_path( 'image-comparison/image-comparison', EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH ),
-            $block_args
-        );
+    // Essential Blocks has its own version of this block under another name. Posts saved
+    // with this one still need its render callback and front-end assets, so keep it
+    // registered, but leave out the editor bundle, which can't run beside Essential Blocks.
+    if ( is_array( $script_asset ) && ! WP_Block_Type_Registry::get_instance()->is_registered( 'essential-blocks/image-comparison' ) ) {
+        $block_args['editor_script'] = 'image-comparison-block-editor-js';
     }
+
+    register_block_type(
+        Image_Comparison_Helper::get_block_register_path( 'image-comparison/image-comparison', EB_IMAGE_COMPARISON_BLOCKS_ADMIN_PATH ),
+        $block_args
+    );
 }
 
 add_action( 'init', 'create_block_image_comparison_block_init' );
