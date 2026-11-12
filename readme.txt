@@ -4,7 +4,7 @@ Tags: block, blocks, image, compare, comparison, image compare, image comparison
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,13 +92,11 @@ Yes, it will work with any standard WordPress theme.
 
 == Changelog ==
 
-= 1.4.2 - 02/11/2026 =
+= 1.4.2 - 12/11/2026 =
+* Fixed: Frontend conflict with Essential Blocks
+* Fixed: Animation preview in editor
 * Improved: Security enhancements
-* Fixed: Existing Image Comparison blocks stopped working on the front end when Essential Blocks is active
-* Fixed: Editor sidebar controls conflicting with Essential Blocks' styles
-* Fixed: Animated blocks appeared without playing their animation when Essential Blocks is active
-* Fixed: Entrance animations not previewing in the block editor
-* Fixed: Chrome console warning about a deprecated DOM event
+* Few minor bug fixes & improvements
 
 = 1.4.1 - 26/10/2026 =
 * Improved: Security enhancements
