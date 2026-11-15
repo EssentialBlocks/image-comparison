@@ -3,6 +3,7 @@
  */
 import { __ } from "@wordpress/i18n";
 import { useEffect, useRef } from "@wordpress/element";
+import { useRegistry } from "@wordpress/data";
 import { useBlockProps, MediaUpload } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
 import { select, dispatch } from "@wordpress/data";
@@ -16,6 +17,7 @@ import { select, dispatch } from "@wordpress/data";
  */
 import ReactCompareImage from "react-compare-image";
 import classnames from "classnames";
+import { queueGeneratedStyles } from "../controls/src/helpers/generatedStylesSync";
 
 import Inspector from "./inspector";
 
@@ -38,6 +40,10 @@ import { typoPrefix_label } from "./constants/typographyConstants";
 
 const edit = (props) => {
 	const { attributes, setAttributes, className, clientId, isSelected } = props;
+	const registry = useRegistry();
+	// The first blockMeta sync after mount is not persistent, so opening a
+	// post does not mark it as changed.
+	const isMountSync = useRef(true);
 	const {
 		blockId,
 		blockMeta,
@@ -273,8 +279,13 @@ const edit = (props) => {
 			mobile: mobileAllStyles,
 		};
 		if (JSON.stringify(blockMeta) != JSON.stringify(styleObject)) {
-			setAttributes({ blockMeta: styleObject });
+			if (isMountSync.current) {
+				queueGeneratedStyles(registry, clientId, { blockMeta: styleObject }, setAttributes);
+			} else {
+				setAttributes({ blockMeta: styleObject });
+			}
 		}
+		isMountSync.current = false;
 	}, [attributes]);
 
 	const hasBothImages = leftImageURL && rightImageURL;
